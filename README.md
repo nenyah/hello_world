@@ -1,5 +1,3 @@
 # hello_world
-just a test for branch
+> hello world means this is a leaning path, all in this package is just a abc learning python
 
-This is steven's github
-welcome to contact us
