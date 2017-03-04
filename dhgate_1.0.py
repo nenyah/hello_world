@@ -22,11 +22,10 @@ headers = {
 }
 # url = 'http://www.dhgate.com/w/women+shoes/1.html'
 r = requests.get(url, headers=headers)
-# print(r.encoding)
-r.encoding = 'utf-8'
+print(r.apparent_encoding)
 print(r.text)
-# r.encoding = 'utf-8'
-# soup = BeautifulSoup(r.text, 'lxml')
-# print(soup)
+
+soup = BeautifulSoup(r.text, 'lxml')
+print(soup)
 
 
