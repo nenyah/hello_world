@@ -63,8 +63,7 @@ def get_urls(url):
     return urls
 
 if __name__ == '__main__':
-    url = 'http://www.amazon.com/Dreambaby-Secure-Catches-Safety-Lock/dp/B016P2DR4M/\
-    ref=cm_cr_arp_d_product_top?ie=UTF8'
+    url = 'http://www.amazon.com/Dreambaby-Secure-Catches-Safety-Lock/dp/B016P2DR4M/ref=cm_cr_arp_d_product_top?ie=UTF8'
     asin = get_asin(url)
     for url in get_urls(url):
         get_info(url,asin)
