@@ -28,6 +28,7 @@ def getData(url, data=None):
 	web_data = requests.get(url)
 	soup = BeautifulSoup(web_data.text,'lxml')
 
+<<<<<<< HEAD
 	items = soup.find_all("div", "listitem")
 	for item in items:
 		title = item.find("h3").find("a").text # 标题
@@ -56,6 +57,20 @@ def getData(url, data=None):
 		}
 		data.append(info)
 	return data
+=======
+url = 'http://www.dhgate.com/w/{}/{}.html'.format(quote_plus(key_word),str(1))
+print(url)
+headers = {
+	'User_Agents': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1'
+}
+# url = 'http://www.dhgate.com/w/women+shoes/1.html'
+r = requests.get(url, headers=headers)
+print(r.apparent_encoding)
+print(r.text)
+
+soup = BeautifulSoup(r.text, 'lxml')
+print(soup)
+>>>>>>> e7887e0f8601cb9c93cc4e4ad5a2b5bc578b07e7
 
 def saveData(data, path='dhgate.csv'):
 	print(data)
