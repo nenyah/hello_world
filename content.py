@@ -39,9 +39,9 @@ def get_content(url):
 		print()
 		if '\n' not in text:
 			content_list.append(text)
-	# print(content_list)
-	# for content in content_list:
-	# 	print(content)
+	print(content_list)
+	for content in content_list:
+		print(content)
 	return content
 
 # 列表地址

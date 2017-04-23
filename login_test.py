@@ -9,9 +9,23 @@ Contact:    lucibriel (at) 163.com
 """
 import requests
 from bs4 import BeautifulSoup
-import re
+import re, os
+import pandas as pd
+
+image_dir = "F:\\douban\\image\\"
+
+#下载图片
+def download_img(imageurl,imageName = "xxx.jpg"):
+    if not os.path.exists(image_dir):
+        os.makedirs(image_dir)
+    rsp = requests.get(imageurl, stream=True)
+    image = rsp.content
+    path = image_dir + imageName +'.jpg'
+    #print(path)
+    with open(path,'wb') as file:
+        file.write(image)
+
 i = 0
-postData = {"start": i} 
 url = 'https://book.douban.com/top250'
 geturl = url + "?start=" + str(i)                     #要获取的页面地址
 print("Now to get " + geturl)
@@ -28,6 +42,7 @@ table = soup.findAll('table',{"width":"100%"})        #找到所有图书信息�
 # print(table)
 # print(titles)
 sz = len(table)                                       #sz = 25,每页列出25篇文章
+data = []
 for j in range(1,sz+1):                               #j = 1~25
     sp = BeautifulSoup(str(table[j-1]),"lxml") #解析每本图书的信息
     # print(sp.div)
@@ -53,16 +68,29 @@ for j in range(1,sz+1):                               #j = 1~25
     nums = re.findall('(\d+)人评价',nums)[0]
     print(type(rating),rating)
     print(type(nums),nums)
-    # download_img(imageurl,bookName)                     #下载图片
-    # book = requests.get(bookurl)                        #打开该图书的网页
-    # sp3 = BeautifulSoup(book.content,"html.parser")     #解析
-    # taglist = sp3.find_all('a',{"class":"  tag"})       #找标签信息
-    # tag = ""
-    # lis = []
-    # for tagurl in taglist:
-    #     sp4 = BeautifulSoup(str(tagurl),"html.parser")  #解析每个标签
-    #     lis.append(str(sp4.a.string))
+    download_img(imageurl,bookName)                     #下载图片
+    book = requests.get(bookurl)                        #打开该图书的网页
+    sp3 = BeautifulSoup(book.content,"html.parser")     #解析
+    taglist = sp3.find_all('a',{"class":"  tag"})       #找标签信息
+    tag = ""
+    lis = []
+    for tagurl in taglist:
+        sp4 = BeautifulSoup(str(tagurl),"html.parser")  #解析每个标签
+        lis.append(str(sp4.a.string))
      
-    # tag = ','.join(lis)        #加逗号
-    # if tag == "":              #如果标签为空，置"无"
-    #     tag = "None"
+    tag = ','.join(lis)        #加逗号
+    if tag == "":              #如果标签为空，置"无"
+        tag = "None"
+    info = {
+    'imageurl':imageurl,
+    'bookurl':bookurl,
+    'bookName':bookName,
+    'nickname':nickname,
+    'notion':notion,
+    'rating':rating,
+    'nums':nums,
+    'tag':tag
+    }
+    data.append(info)
+df = pd.DataFrame(data)
+df.to_csv("doupan.csv",index=False)

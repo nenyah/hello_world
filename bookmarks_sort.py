@@ -13,7 +13,7 @@ from Tool.tool import get_filenames
 import pandas as pd
 
 
-# 收藏平导出的本地文件， html格式
+# 收藏夹导出的本地文件， html格式
 path = r"E:\Work\wwwroot\Code\bookmark"
 
 def get_bookmarks(path):

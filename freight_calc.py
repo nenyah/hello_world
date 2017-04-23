@@ -105,7 +105,7 @@ def save_excel(source_path,target_path=None):
 	print('Begin...')
 	if target_path == None:
 		target_path = os.path.splitext(source_path)[0]+'_res.csv'
-	df = pd.read_csv(source_path, encoding='gb2312')
+	df = pd.read_excel(source_path)
 	df = df.dropna(subset=['快递单号'])
 	freight = []
 	for track in df['快递单号']:
@@ -126,5 +126,5 @@ def save_excel(source_path,target_path=None):
 
 
 if __name__ == '__main__':
-	path = r'E:\Work\06-Work\00-Todo\Self Calc\Freight Self Calc Sort\Total.csv'
+	path = r"E:\Work\06-Work\00-Todo\Self Calc\Freight Self Calc Sort\Total.xlsx"
 	save_excel(path)
