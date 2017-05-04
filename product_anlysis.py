@@ -24,8 +24,12 @@ def save(paths, file):
 	df.to_csv(file,index=False)
 	print("保存成功！")
 
+#
+
 if __name__ == '__main__':
 	root = r"E:\Work\06-Work\Data Anlysis\03-商品数据\2017\Mon3"
 	file = r"E:\Work\06-Work\Data Anlysis\03-商品数据\2017\汇总\total.csv"
-	paths = makePath(root)
-	save(paths,file)
+	df = pd.read_csv(file, encoding="gbk")
+	df_sort = df[df['国家'] == '全球']
+	print(len(df))
+	print(len(df_sort))
