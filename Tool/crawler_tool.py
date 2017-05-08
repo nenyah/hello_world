@@ -40,7 +40,7 @@ class download():
         UA = random.choice(self.user_agent_list) ##从self.user_agent_list中随机取出一个字符串
         headers = {'User-Agent': UA}  ##构造成一个完整的User-Agent （UA代表的是上面随机取出来的字符串哦）
 
-        if proxy == None: ##当代理为空时，不使用代理获取response（别忘了response啥哦！之前说过了！！）
+        if proxy is None: ##当代理为空时，不使用代理获取response（别忘了response啥哦！之前说过了！！）
             try:
                 return requests.get(url, headers=headers, timeout=timeout)##这样服务器就会以为我们是真的浏览器了
             except:##如过上面的代码执行报错则执行下面的代码

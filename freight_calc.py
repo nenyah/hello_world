@@ -103,7 +103,7 @@ def save_excel(source_path,target_path=None):
 	target_path: file
 	"""
 	print('Begin...')
-	if target_path == None:
+	if target_path is None:
 		target_path = os.path.splitext(source_path)[0]+'_res.csv'
 	df = pd.read_excel(source_path)
 	df = df.dropna(subset=['快递单号'])

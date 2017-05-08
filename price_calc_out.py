@@ -92,7 +92,7 @@ def save_excel(source_path,target_path=None):
 	source_path: file
 	target_path: file
 	"""
-	if target_path == None:
+	if target_path is None:
 		target_path = os.path.splitext(source_path)[0]+'_res.xlsx'
 	wb = openpyxl.load_workbook(source_path)
 	ws = wb.active

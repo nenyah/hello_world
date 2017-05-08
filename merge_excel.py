@@ -38,7 +38,7 @@ def read_excel(path):
 
 
 def save_excel(data,titles,path = None):
-	if path == None:
+	if path is None:
 		path = 'Total.xlsx'
 
 	wb = openpyxl.Workbook()
