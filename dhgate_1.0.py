@@ -19,7 +19,7 @@ from numpy import mean
 
 def buildUrl(keyword="women shoes", page=1):
 	key_word = quote_plus(keyword)
-	urls = ['http://www.dhgate.com/w/{}/{}.html'.format(key_word,str(i)) for i in range(page)]
+	urls = ['http://www.dhgate.com/w/{0}/{1}.html'.format(key_word,str(i)) for i in range(page)]
 	return urls
 
 

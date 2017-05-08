@@ -18,7 +18,7 @@ header = {
 trackNum = 'RO312908771EE'
 
 def get_track_info(trackNum):
-	url = 'http://global.cainiao.com/detail.htm?mailNoList={}'.format(trackNum)
+	url = 'http://global.cainiao.com/detail.htm?mailNoList={0}'.format(trackNum)
 	r = requests.get(url)
 	print(r)
 	soup = BeautifulSoup(r.text, 'lxml')

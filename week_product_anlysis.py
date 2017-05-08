@@ -38,4 +38,4 @@ anlysis['点击率'] = anlysis['点击率'].map('{:.2%}'.format)
 anlysis['P4P占比'] = anlysis['P4P占比'].map('{:.2%}'.format)
 anlysis = anlysis.ix[:, output_col]
 date = datetime.date.today() - datetime.timedelta(days=2)
-anlysis.to_csv(r'E:\Work\06-Work\Data Anlysis\03-商品数据\产品分析_{}.csv'.format(date), index=False)
+anlysis.to_csv(r'E:\Work\06-Work\Data Anlysis\03-商品数据\产品分析_{0}.csv'.format(date), index=False)

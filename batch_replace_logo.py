@@ -40,7 +40,7 @@ def addLogo(img):
 def makePath(root):
 	imgs = []
 	fileNumber = os.listdir(root)
-	paths = [r"{}{}\pImg".format(root,path) for path in fileNumber]
+	paths = [r"{0}{1}\pImg".format(root,path) for path in fileNumber]
 	for path in paths:
 		for file in os.listdir(path):
 			imgs.append(os.path.join(path,file))

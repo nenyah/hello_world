@@ -47,7 +47,7 @@ def save_sku_price(source_path,target_path,A_PRICE = 8.58,E_PRICE = 17.48):
 		for item in sku_list:
 			# print(item)
 			print(item['sku'],item['price'])
-			f.write('{},{}\n'.format(item['sku'],item['price']))
+			f.write('{0},{1}\n'.format(item['sku'],item['price']))
 
 if __name__ == '__main__':
 	source_path = r'C:\Users\steve\Desktop\EATGE_price.xls'

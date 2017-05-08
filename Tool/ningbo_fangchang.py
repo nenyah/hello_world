@@ -27,7 +27,7 @@ def get_list_url(url):
     max_page = soup.select('.PagerCss a')[-1]['href'].split('=')[-1]
 
     for page in range(1, int(max_page) + 1):
-        list_url = 'http://newhouse.cnnbfdc.com/lpxx.aspx?p={}'.format(str(page))
+        list_url = 'http://newhouse.cnnbfdc.com/lpxx.aspx?p={0}'.format(str(page))
         html = requests.get(list_url, headers=headers)
         soup = BeautifulSoup(html.text, 'lxml')
         all_a = soup.select(".sp_zi12c")
@@ -35,7 +35,7 @@ def get_list_url(url):
             title = a.text.strip()
             href = 'http://newhouse.cnnbfdc.com/' + a['href']
             info = {'name': title, 'url': href}
-            print('Get list info: {}'.format(info))
+            print('Get list info: {0}'.format(info))
             urls_list.insert_one(info)
     #         print(info)
     #         data.append(info)

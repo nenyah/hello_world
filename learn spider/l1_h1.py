@@ -18,6 +18,6 @@ if __name__ == '__main__':
 	url = 'http://www.baidu.com'
 	for i in range(100):
 		gethtml(url)
-		print('Get baidu {} times'.format(i+1))
+		print('Get baidu {0} times'.format(i+1))
 	end = time.time()
-	print('100 times use: {}'.format(end-start))
+	print('100 times use: {0}'.format(end-start))

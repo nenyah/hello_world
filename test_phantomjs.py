@@ -10,7 +10,7 @@ def tidy(str):
 
 def getReview(productId):
 	memberId = "202367604"
-	url = 'https://feedback.aliexpress.com/display/productEvaluation.htm?productId={}&ownerMemberId={}'.format(productId, memberId)
+	url = 'https://feedback.aliexpress.com/display/productEvaluation.htm?productId={0}&ownerMemberId={1}'.format(productId, memberId)
 	obj = webdriver.PhantomJS()
 	obj.set_page_load_timeout(5)
 	html = ""
@@ -20,9 +20,9 @@ def getReview(productId):
 		data = []
 		maxs = obj.find_elements_by_css_selector("a.ui-goto-page")
 		maxPage = [m.text for m in maxs][-2]
-		print("总页数：{}".format(maxPage))
+		print("总页数：{0}".format(maxPage))
 		for i in range(1, int(maxPage)+2):
-			print("第{}页".format(str(i)))
+			print("第{0}页".format(str(i)))
 			soup = BeautifulSoup(obj.page_source,'lxml')
 			div = soup.find_all(class_="feedback-item")
 			for tag in div:

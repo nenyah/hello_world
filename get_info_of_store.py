@@ -4,7 +4,7 @@ from crawler_tool import requests
 import time,re
 from bs4 import BeautifulSoup
 
-paths = [r"https://naturalhome.aliexpress.com/store/518251/search/{}.html".format(str(i)) for i in range(1,11)]
+paths = [r"https://naturalhome.aliexpress.com/store/518251/search/{0}.html".format(str(i)) for i in range(1,11)]
 
 def getDiscount(path):
 	try:
@@ -17,7 +17,7 @@ def getDiscount(path):
 			discount = info.find(class_="discount").text.strip() if info.find(class_="discount") else None
 			print(pid,discount)
 			with open("discount.txt","a") as f:
-				f.write("{},{}\n".format(pid,discount))
+				f.write("{0},{1}\n".format(pid,discount))
 	except Exception as e:
 		raise e
 
