@@ -17,7 +17,7 @@ def check_version():
     v = sys.version_info
     if v.major == 3 and v.minor >= 4:
         return True
-    print('Your current python is %d.%d. Please use Python 3.4.' % (v.major, v.minor))
+    print('Your current python is {0:d}.{1:d}. Please use Python 3.4.'.format(v.major, v.minor))
     return False
 
 if not check_version():
@@ -29,25 +29,25 @@ from wsgiref.simple_server import make_server
 
 EXEC = sys.executable
 PORT = 39093
-HOST = 'local.liaoxuefeng.com:%d' % PORT
+HOST = 'local.liaoxuefeng.com:{0:d}'.format(PORT)
 TEMP = tempfile.mkdtemp(suffix='_py', prefix='learn_python_')
 INDEX = 0
 
 def main():
     httpd = make_server('127.0.0.1', PORT, application)
-    print('Ready for Python code on port %d...' % PORT)
+    print('Ready for Python code on port {0:d}...'.format(PORT))
     httpd.serve_forever()
 
 def get_name():
     global INDEX
     INDEX = INDEX + 1
-    return 'test_%d' % INDEX
+    return 'test_{0:d}'.format(INDEX)
 
 def write_py(name, code):
-    fpath = os.path.join(TEMP, '%s.py' % name)
+    fpath = os.path.join(TEMP, '{0!s}.py'.format(name))
     with open(fpath, 'w', encoding='utf-8') as f:
         f.write(code)
-    print('Code wrote to: %s' % fpath)
+    print('Code wrote to: {0!s}'.format(fpath))
     return fpath
 
 def decode(s):
@@ -67,7 +67,7 @@ def application(environ, start_response):
         start_response('200 OK', [('Content-Type', 'text/html')])
         L = [b'<html><head><title>ENV</title></head><body>']
         for k, v in environ.items():
-            p = '<p>%s = %s' % (k, str(v))
+            p = '<p>{0!s} = {1!s}'.format(k, str(v))
             L.append(p.encode('utf-8'))
         L.append(b'</html>')
         return L
@@ -91,7 +91,7 @@ def application(environ, start_response):
     r = dict()
     try:
         fpath = write_py(name, code)
-        print('Execute: %s %s' % (EXEC, fpath))
+        print('Execute: {0!s} {1!s}'.format(EXEC, fpath))
         r['output'] = decode(subprocess.check_output([EXEC, fpath], stderr=subprocess.STDOUT, timeout=5))
     except subprocess.CalledProcessError as e:
         r = dict(error='Exception', output=decode(e.output))

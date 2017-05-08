@@ -13,7 +13,7 @@ b = map(ct, data.as_matrix()) #用map方式执行
 data = pd.DataFrame(list(b)).fillna(0) #实现矩阵转换，空值用0填充
 print(data)
 end = time.clock() #计时结束
-print('\n转换完毕，用时：%0.2f秒' %(end-start))
+print('\n转换完毕，用时：{0:0.2f}秒'.format((end-start)))
 del b #删除中间变量b，节省内存
 
 support = 0.05 #最小支持度
@@ -24,4 +24,4 @@ start = time.clock() #计时开始
 print('\n开始搜索关联规则...')
 find_rule(data, support, confidence, ms)
 end = time.clock() #计时结束
-print('\n搜索完成，用时：%0.2f秒' %(end-start))
+print('\n搜索完成，用时：{0:0.2f}秒'.format((end-start)))
