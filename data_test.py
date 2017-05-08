@@ -17,4 +17,4 @@ with open(path,'r', encoding='utf-8') as text:
 	counts_dict = {index:words.count(index) for index in words_index}
 
 for word in sorted(counts_dict,key=lambda x: counts_dict[x],reverse=True):
-	print('{} -- {} times'.format(word,counts_dict[word]))
+	print('{0} -- {1} times'.format(word,counts_dict[word]))

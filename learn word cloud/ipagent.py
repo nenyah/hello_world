@@ -55,7 +55,7 @@ def checkIP(ip):
 	# 检验地址:
 	check_url = "http://ip.chinaz.com/getip.aspx"
 	proxies={'http':ip}
-	print('CHCEK: {}'.format(proxies))
+	print('CHCEK: {0}'.format(proxies))
 	try:
 		r = requests.get(
 			check_url, 
@@ -68,7 +68,7 @@ def checkIP(ip):
 		print(e)
 	else:
 		if r.status_code == 200:
-			print('{} is valid.'.format(ip))
+			print('{0} is valid.'.format(ip))
 			with open('ips_valid.txt','a+') as f:
 				f.write(ip+'\n')
 			return True
@@ -90,7 +90,7 @@ def getIP(url):
 			tds = ip.find_all("td")
 			# print(tds[1].contents[0])
 			ip_temp = tds[5].string.lower()+'://'+tds[1].string+":"+tds[2].string
-			print('GET {}'.format(ip_temp))
+			print('GET {0}'.format(ip_temp))
 			# 检验IP
 			if checkIP(ip_temp):
 				IP_POOL.append(ip_temp)
@@ -101,7 +101,7 @@ def getIP(url):
 
 
 if __name__=="__main__":
-	urls = ['http://www.xicidaili.com/nn/{}'.format(str(i)) 
+	urls = ['http://www.xicidaili.com/nn/{0}'.format(str(i)) 
 		for i in range(1,getMaxPage())]
 	p = Pool(4)
 	for i in urls:

@@ -22,7 +22,7 @@ def get_qiushi(page=1):
 		'Connection':'keep-alive'
 	}
 
-	url = 'http://www.qiushibaike.com/hot/page/{}'.format(str(page))
+	url = 'http://www.qiushibaike.com/hot/page/{0}'.format(str(page))
 	web_data = requests.get(url,headers=headers)
 	soup = BeautifulSoup(web_data.text,'lxml')
 
@@ -34,7 +34,7 @@ def get_qiushi(page=1):
 	for usr, content, vote, comment in zip(usrs,contents,votes,comments):
 		print('用户:',usr.text.strip())
 		print('内容:',content.text.strip())
-		print('好笑：{}\t评论：{}'.format(vote.text.strip(),comment.text.strip()))
+		print('好笑：{0}\t评论：{1}'.format(vote.text.strip(),comment.text.strip()))
 		print('='*50)
 
 if __name__ == '__main__':

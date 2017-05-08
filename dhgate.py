@@ -53,7 +53,7 @@ def save_data(url,path='dhgate.csv',data=None):
 		}
 		print(data)
 		with open(path,'a') as f:
-			f.write('{},{},{},{},{},{},{},{}\n'.format(
+			f.write('{0},{1},{2},{3},{4},{5},{6},{7}\n'.format(
 				data['title'],
 				data['price'],
 				data['min_order'],
@@ -67,7 +67,7 @@ def save_data(url,path='dhgate.csv',data=None):
 
 def get_data(key_word,page_num):
 	key_word = quote_plus(key_word)
-	urls = ['http://www.dhgate.com/w/{}/{}.html'.format(key_word,str(i)) for i in range(page_num)]
+	urls = ['http://www.dhgate.com/w/{0}/{1}.html'.format(key_word,str(i)) for i in range(page_num)]
 	for url in urls:
 		save_data(url,key_word+'.csv')
 

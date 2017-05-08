@@ -27,7 +27,7 @@ def get_asin(url):
 
 
 def get_review_page_number(asin):
-    url = 'http://www.amazon.com/product-reviews/{}'.format(asin)
+    url = 'http://www.amazon.com/product-reviews/{0}'.format(asin)
     web_data = requests.get(url, headers=headers)
     soup = BeautifulSoup(web_data.text, 'lxml')
     href = soup.select('.a-last a')[0].get('href')
@@ -58,7 +58,7 @@ def get_info(url,asin):
 def get_urls(url):
     asin = get_asin(url)
     max_page = get_review_page_number(asin)
-    urls = ['http://www.amazon.com/product-reviews/{}?pageNumber={}'.format(asin, str(num)) for num in
+    urls = ['http://www.amazon.com/product-reviews/{0}?pageNumber={1}'.format(asin, str(num)) for num in
             range(1, max_page + 1)]
     return urls
 

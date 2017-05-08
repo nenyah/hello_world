@@ -16,9 +16,9 @@ def getdirsize(dir, path=r'size.csv'):
 			for name in files:
 				filename = join(root, name)
 				size = getsize(filename )
-				print('There are {:.3f} Mbytes in {}'.format(size/1024/1024,filename))
+				print('There are {0:.3f} Mbytes in {1}'.format(size/1024/1024,filename))
 				with open(path,'a+') as f:
-					f.write('{:.3f},{}\n'.format(size/1024/1024,filename))
+					f.write('{0:.3f},{1}\n'.format(size/1024/1024,filename))
 		except WindowsError:
 			pass
 

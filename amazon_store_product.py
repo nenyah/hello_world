@@ -20,5 +20,5 @@ wb_data = session.post(url,data=data)
 js = wb_data.json()
 for item in js['products']:
 	for k,v in item.items():
-		print('{} => {}'.format(k,v))
+		print('{0} => {1}'.format(k,v))
 	print('='*60)	
