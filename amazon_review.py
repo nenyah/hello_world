@@ -18,9 +18,10 @@ headers = {
     'User-Agent':
         'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36'
 }
-client = pymongo.MongoClient('localhost',27017)
+client = pymongo.MongoClient('localhost', 27017)
 amazon = client['amazon']
 reviews = amazon['reviews']
+
 
 def get_asin(url):
     return re.search(r'\/dp\/(.*)\/', url).group(1)
@@ -35,7 +36,7 @@ def get_review_page_number(asin):
     return int(max_page)
 
 
-def get_info(url,asin):
+def get_info(url, asin):
     time.sleep(1)
     web_data = requests.get(url, headers=headers)
     soup = BeautifulSoup(web_data.text, 'lxml')
@@ -66,4 +67,4 @@ if __name__ == '__main__':
     url = 'http://www.amazon.com/Dreambaby-Secure-Catches-Safety-Lock/dp/B016P2DR4M/ref=cm_cr_arp_d_product_top?ie=UTF8'
     asin = get_asin(url)
     for url in get_urls(url):
-        get_info(url,asin)
+        get_info(url, asin)

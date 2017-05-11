@@ -10,20 +10,19 @@ Contact:    lucibriel (at) 163.com
 import dns.resolver
 import sys
 
+
 def check(email):
-    user_name,domain = email.split('@')
-    MX = dns.resolver.query(domain,'MX')
+    user_name, domain = email.split('@')
+    MX = dns.resolver.query(domain, 'MX')
     result = ''
     if MX:
         for info in MX:
-            result += 'MX preference = {0} Mail exchanger = {1}\n'.format(info.preference,
-info.exchange)
+            result += 'MX preference = {0} Mail exchanger = {1}\n'.format(
+                info.preference, info.exchange)
     else:
         result = "{0} dosn't exist".format(email)
     return result
 
 if __name__ == '__main__':
     emails = sys.argv[1:]
-    print(*map(check,emails))
-    
-
+    print(*map(check, emails))
