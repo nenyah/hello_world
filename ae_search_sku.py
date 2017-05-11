@@ -27,14 +27,15 @@ def get_sku(product_num):
     web_data = requests.get(url, headers=headers)
     # time.sleep(2)
     soup = BeautifulSoup(web_data.text, 'lxml')
-    sku_exits = True if 'SKU' in [item.text for item in soup.select('.key')] else False
+    sku_exits = True if 'SKU' in [
+        item.text for item in soup.select('.key')] else False
     if sku_exits:
         sku = filter(find_sku, [item.text for item in soup.select('.value')])
         print('{0}:{1}'.format(product_num, list(sku)[0]))
     else:
         print('{0} has no sku'.format(product_num))
 
-if __name__=='__main__':
+if __name__ == '__main__':
     products_num = '''
     32601892116
     32600494782
