@@ -26,4 +26,4 @@ def calc_eub(country, weight):
         return calcs['r2_price'] * weight + calcs['r2_handle']
 
 if __name__ == '__main__':
-    print(calc_eub('sa', 40))
+    print(calc_eub('ukraine', 1292))
