@@ -1,7 +1,7 @@
 '''
-@author: lucibriel@163.com
-@date: 2017-05-06
-@fun: 计算E邮宝运费
+ author: lucibriel@163.com
+ date: 2017-05-06
+ fun: 计算E邮宝运费
 '''
 import pandas as pd
 import os
@@ -24,6 +24,7 @@ def calc_eub(country, weight):
         return calcs['r1_price'] * weight + calcs['r1_handle']
     else:
         return calcs['r2_price'] * weight + calcs['r2_handle']
+
 
 if __name__ == '__main__':
     print(calc_eub('ukraine', 1292))
