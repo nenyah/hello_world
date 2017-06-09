@@ -6,7 +6,7 @@ import pandas as pd
 import os
 
 os.chdir(r"F:\workspace")
-path = r"F:\workspace\Epacket.xls"
+path = r"C:\Users\steve\Desktop\Epacket20170526.xls"
 df = pd.read_excel(path)
 freight = []
 for track in df['快递单号']:
@@ -19,7 +19,7 @@ for track in df['快递单号']:
         freight.append(cost)
     except:
         print(track)
-print(freight)
+# print(freight)
 df['结算运费'] = pd.Series(freight)
 df = df.loc[:, ['快递单号', '称重重量', '结算运费']]
 df.columns = ['物流单号', '结算重量', '结算运费']
