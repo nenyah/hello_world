@@ -20,13 +20,13 @@ def get_file_names(path):
 
 
 # 获取目标目录所有
-def get_data_from_path(path, on="产品编号"):
+def get_data_from_path(path, on=None):
     """合并数据"""
     xlsx = pd.ExcelFile(path)
     df = dict()
     for name in xlsx.sheet_names:
         df[name] = pd.read_excel(xlsx, name)
-        print(len(df[name]))
+        # print(len(df[name]))
     data = pd.concat(df, axis=0)
     if on:
         return data.drop_duplicates(on)

@@ -6,7 +6,7 @@ import pandas as pd
 import os
 
 os.chdir(r"F:\workspace")
-path = r"C:\Users\steve\Desktop\Epacket20170526.xls"
+path = r"Epacket.xls"
 df = pd.read_excel(path)
 freight = []
 for track in df['快递单号']:

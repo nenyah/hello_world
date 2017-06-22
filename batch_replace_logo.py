@@ -26,10 +26,10 @@ def removeLogo(img):
         print("File doesn't exists!!")
 
 
-def addLogo(img):
+def addLogo(img, logo="movefun"):
     im = Image.open(img)
 
-    logo_img = r"C:\Users\steve\Desktop\Temp\商标logo\MOVEFUN.png"
+    logo_img = r"E:\Work\06-Work\09-企业相关\商标logo\{}.png".format(logo)
     logo = Image.open(logo_img)
     layer = Image.new('RGBA', im.size, (0, 0, 0, 0))
     layer.paste(logo, (0, 0))
@@ -37,30 +37,24 @@ def addLogo(img):
     out.save(img)
 
 
-def makePath(root):
+def makePath(root, keypath=None):
     imgs = []
-    fileNumber = os.listdir(root)
-    paths = [r"{0}{1}\pImg".format(root, path) for path in fileNumber]
-    for path in paths:
-        for file in os.listdir(path):
+    for info in os.walk(root):
+        for file in info[-1]:
             imgs.append(os.path.join(path, file))
     return imgs
 
 
 if __name__ == '__main__':
-    path = r"C:\Users\steve\Desktop\0"
+    path = r"C:\Users\steve\Desktop\图片修改"
     imgs = makePath(path)
-    # print(imgs)
-    # p = Pool()
-    # p.map(removeLogo, imgs)
-    # p.close()
-    # p.join()
-    ad_imgs = [re.findall(r".*\\PImg1_.*", img)[0]
-               for img in imgs
-               if re.findall(r".*\\PImg1_.*", img)]
-    print(ad_imgs)
+    print(imgs)
+    p = Pool()
+    p.map(removeLogo, imgs)
+    p.close()
+    p.join()
 
     p = Pool()
-    p.map(addLogo, ad_imgs)
+    p.map(addLogo, imgs)
     p.close()
     p.join()
