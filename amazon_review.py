@@ -75,7 +75,7 @@ def get_urls(url):
     return urls
 
 if __name__ == '__main__':
-    url = 'https://www.amazon.com/Capezio-Womens-DS11-Fierce-Sneaker/dp/B0009Z8B0M/'
+    url = 'https://www.amazon.com/Capezio-Womens-DS11A-Fierce-Dansneaker/dp/B0009ZAHFE/ref=sr_1_16?s=apparel&ie=UTF8&qid=1498452763&sr=1-16&nodeID=7141123011&psd=1&keywords=dance+shoes'
     asin = get_asin(url)
     df = pd.DataFrame()
     for url in get_urls(url):

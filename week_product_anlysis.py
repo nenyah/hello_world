@@ -25,6 +25,18 @@ def anlysis(product, promotion, savepath):
         if i not in ['商品名称']:
             promotion_df[i] = promotion_df[i].astype(np.number)
         print(i, promotion_df[i].dtypes)
+    print("p_df大小", p_df.shape)
+    print("promotion_df大小", promotion_df.shape)
+
+    is_in = []
+    for i in promotion_df.index:
+        if i in p_df.index:
+            is_in.append(True)
+        else:
+            is_in.append(False)
+
+    promotion_df = promotion_df[is_in]
+    print("promotion_df大小", promotion_df.shape)
     result = pd.concat([p_df, promotion_df], axis=1)
 
     col = ['商品ID', '商品标题', '搜索曝光量', '商品页浏览量',
@@ -55,6 +67,6 @@ if __name__ == '__main__':
     savepath = '产品分析_{}.csv'
     os.chdir(workpath)
     print(os.getcwd())
-    product = "Product+Analysis 20170616.xls"
-    promotion = "商品推广20170616.xls"
+    product = "Product+Analysis 20170701.xls"
+    promotion = "商品推广20170701.xls"
     anlysis(product, promotion, savepath)

@@ -99,12 +99,10 @@ def draw_scatter(x, y):
     plt.xlabel("sale num")
     plt.ylabel("profit")
     xmin, xmax, ymin, ymax = int(min(x)), int(max(x)), int(min(y)), int(max(y))
-    print(xmin, xmax, ymin, ymax)
     xmid = (xmin + xmax) / 10
     ymid = (ymin + ymax) / 10
     plt.axis([xmin - xmid, xmax + xmid, ymin - ymid, ymax + ymid])
-    plt.show()
-    plt.save_png("profit.png")
+    plt.savefig("profit.png", format='png', dpi=300)
 
 # 存入excel
 
