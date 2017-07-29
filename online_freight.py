@@ -36,7 +36,7 @@ def tidy_data(df):
     return group_df
 
 if __name__ == '__main__':
-    path = r'E:\Work\06-Work\00-Todo\线上运费\20170628\*.xls'
+    path = r'E:\Work\06-Work\00-Todo\线上运费\20170729\*.xls'
     df = get_data(path)
     df = tidy_data(df)
     print(df)

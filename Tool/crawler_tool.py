@@ -9,7 +9,7 @@ class download():
     def __init__(self):
 
         self.iplist = []  # 初始化一个list用来存放我们获取到的IP
-        html = requests.get("http://haoip.cc/tiqu.htm")  # 不解释咯
+        html = requests.get("http://www.xicidaili.com/nn/")  # 不解释咯
         # 表示从html.text中获取所有r/><b中的内容，re.S的意思是包括匹配包括换行符，findall返回的是个list哦！
         iplistn = re.findall(r'r/>(.*?)<b', html.text, re.S)
         for ip in iplistn:

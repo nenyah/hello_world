@@ -14,50 +14,25 @@ from pandas import Series
 import numpy as np
 import os
 import matplotlib.pyplot as plt
-
-# 按国家取TOP10
+import arrow
 
 
 def top10(df, country='United States', startDate='2016-01-01', endDate='2016-08-31'):
+    """按国家取TOP10"""
     df = df[(startDate < df.paid_time) & (df.paid_time < endDate)]
     return df[df['country'] == country].groupby(['SPU']).sum().sort_values(by='orders', ascending=False)
 
-# 定义函数，获得SPU
-
-
-def get_spu(item):
-    if item.startswith('B9'):
-        spu, attr = item[:5], item[5:]
-    elif item.startswith('EATGE'):
-        spu, attr = item[:11], item[12:]
-    elif item.startswith('WZ'):
-        spu, attr = item[:9], item[9:]
-    else:
-        spu, attr = item[:7], item[7:]
-        if attr.startswith('-'):
-            attr = attr[1:]
-    return spu, attr
-
-# 获取分类
-
 
 def get_cat(item):
+    """获取分类"""
     item = str(item)
-    if item.startswith('B9'):
-        return 'B9'
-    elif item.startswith('EATGE'):
-        return 'EATGE'
-    elif item.startswith('WZ'):
-        return 'WZ'
-    else:
-        return item[:2]
-
-# 导入表格，做预处理
+    return item[:2]
 
 
 def get_data(path):
+    """导入表格，做预处理"""
     cols = ['erp_id', 'order_id', 'img_url', 'SKU列表',
-            'carrier', 'channel', 'track_number', 'price', 'weight',
+            'courier', 'channel', 'track_number', 'price', 'weight',
             'weight_cal', 'get_money', 'purchase', 'freight',
             'package_fee', 'profit', 'paid_time', 'store', 'ship_time',
             'country'
@@ -77,24 +52,26 @@ def get_data(path):
     df['multi'] = df.sale_num.map(lambda x: 'Y' if x > 1 else 'N')
     df['win'] = df.profit.map(lambda x: 'Y' if x > 0 else 'N')
     # 梳理数据
-    df['SPU'] = Series([i[0] for i in df.sku.map(get_spu)])
-    df['attr'] = Series([i[-1] for i in df.sku.map(get_spu)])
+    df['SPU'] = df.sku.map(lambda x: x[:7])
+    df['attr'] = df.sku.map(lambda x: x[7:].split("-")[-1])
     df['cat'] = df.SPU.map(get_cat)
     df = df.dropna(subset=['get_money', 'freight'])
     return df
 
 
-# 按SPU分组汇总，按利润排序
 def group(df, columns='SPU'):
+    """按SPU分组汇总，按利润排序"""
     df = df.groupby(columns).sum().sort_values(by='profit')
     df['avg_profit'] = round(df.profit / df.sale_num, 2)
     df['avg_price'] = round(df.price / df.sale_num, 2)
+    df['profit_rate'] = round(df.profit / df.price, 4)
+    df['profit_rate'] = df['profit_rate'].map(lambda x: '{}%'.format(x * 100))
     return df
-
-# 绘制散点图
 
 
 def draw_scatter(x, y):
+    """绘制散点图"""
+    today = arrow.now().format('MM-DD')
     plt.scatter(x, y)
     plt.xlabel("sale num")
     plt.ylabel("profit")
@@ -102,24 +79,25 @@ def draw_scatter(x, y):
     xmid = (xmin + xmax) / 10
     ymid = (ymin + ymax) / 10
     plt.axis([xmin - xmid, xmax + xmid, ymin - ymid, ymax + ymid])
-    plt.savefig("profit.png", format='png', dpi=300)
-
-# 存入excel
+    plt.savefig(today + " profit.png", format='png', dpi=300)
 
 
 def save(df, path):
-    excel_name = 'profit.xlsx'
-    sheet_name = ['loss', 'profit', 'country_loss', 'store', 'cat', 'total']
-    cols = ['销量', '利润/￥', '销售额/￥', '单个销售额/￥', '单个利润/￥']
-    sum_spu = group(df).loc[:, ['sale_num', 'profit', 'price',
-                                'avg_price', 'avg_profit']]
-    sum_country = group(df, 'country').loc[:, ['sale_num', 'profit', 'price',
-                                               'avg_price', 'avg_profit']]
-    sum_store = group(df, 'store').loc[:, ['sale_num', 'profit', 'price',
-                                           'avg_price', 'avg_profit']]
-    sum_cat = group(df, 'cat').loc[:, ['sale_num', 'profit', 'price',
-                                       'avg_price', 'avg_profit']]
+    """存入excel"""
+    this_month = arrow.now().month
+    excel_name = 'Mon {} profit.xlsx'.format(str(this_month))
+    sheet_name = ['loss', 'profit', 'country_loss',
+                  'store', 'cat', 'courier', 'total']
+    cols = ['销量', '利润/￥', '销售额/￥', '单个销售额/￥', '单个利润/￥', '利润率']
+    out_cols = ['sale_num', 'profit', 'price',
+                'avg_price', 'avg_profit', 'profit_rate']
+    sum_spu = group(df).loc[:, out_cols]
+    sum_country = group(df, 'country').loc[:, out_cols]
+    sum_store = group(df, 'store').loc[:, out_cols]
+    sum_cat = group(df, 'cat').loc[:, out_cols]
+    sum_courier = group(df, 'courier').loc[:, out_cols]
     draw_scatter(sum_spu['sale_num'], sum_spu['profit'])
+    sum_courier.columns = cols
     sum_spu.columns = cols
     sum_country.columns = cols
     sum_store.columns = cols
@@ -131,11 +109,14 @@ def save(df, path):
         sum_country.to_excel(writer, sheet_name[2])
         sum_store.to_excel(writer, sheet_name[3])
         sum_cat.to_excel(writer, sheet_name[4])
+        sum_courier.to_excel(writer, sheet_name[5])
         sum_spu.to_excel(writer, sheet_name[-1])
 
 if __name__ == '__main__':
     os.chdir(r"E:\Work\06-Work\Data Anlysis\Profit Loss\2017")
-    path = r".\Mon06\Mon06_product.xls"
+    path = r".\Mon07\Mon07_product.xls"
     df = get_data(path)
-    t_path = r'.\Mon06'
+    today = arrow.now().format('MM-DD')
+    df.to_csv(today + " test.csv", index=False)
+    t_path = r'.\Mon07'
     save(df, t_path)

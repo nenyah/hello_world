@@ -26,28 +26,34 @@ def removeLogo(img):
         print("File doesn't exists!!")
 
 
-def addLogo(img, logo="movefun"):
-    im = Image.open(img)
+def addLogo(img, logo="zhjlut"):
+    if os.path.exists(img):
+        im = Image.open(img)
+        width, height = im.size
+        if height / width > 0.875:
+            logo_img = r"E:\Work\06-Work\09-企业相关\商标logo\{}.png".format(logo)
+            logo = Image.open(logo_img)
+            layer = Image.new('RGBA', im.size, (0, 0, 0, 0))
+            layer.paste(logo, (0, 0))
+            out = Image.composite(layer, im, layer)
+            out.save(img)
+        else:
+            print("Needn't addLogo")
+    else:
+        print("File doesn't exists!!")
 
-    logo_img = r"E:\Work\06-Work\09-企业相关\商标logo\{}.png".format(logo)
-    logo = Image.open(logo_img)
-    layer = Image.new('RGBA', im.size, (0, 0, 0, 0))
-    layer.paste(logo, (0, 0))
-    out = Image.composite(layer, im, layer)
-    out.save(img)
 
-
-def makePath(root, keypath=None):
+def makePath(root, keypath=None, keyword=None):
     imgs = []
     for info in os.walk(root):
         for file in info[-1]:
-            imgs.append(os.path.join(path, file))
-    return imgs
+            imgs.append(os.path.join(info[0], file))
+    return [img for img in imgs if keyword in img]
 
 
 if __name__ == '__main__':
     path = r"C:\Users\steve\Desktop\图片修改"
-    imgs = makePath(path)
+    imgs = makePath(path, keyword='pImg')
     print(imgs)
     p = Pool()
     p.map(removeLogo, imgs)

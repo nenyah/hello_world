@@ -11,19 +11,29 @@ import datetime
 import os
 
 
+def tidy_number(el):
+    el = str(el)
+    if ',' in el:
+        return float(el.replace(',', ''))
+    if '%' in el:
+        return float(el.split("%")[0]) * 10**-2
+    return float(el)
+
+
 def anlysis(product, promotion, savepath):
     p_df = pd.read_excel(product)
     p_df = p_df[p_df['平台'] == "TOTAL"]
     p_df = p_df.set_index(p_df['商品标题'])
     promotion_df = pd.read_excel(promotion)
     promotion_df = promotion_df.set_index(promotion_df['商品名称'])
+
     for i in p_df.columns:
         if i not in ['商品ID', '商品标题', '平台']:
-            p_df[i] = p_df[i].astype(np.number)
+            p_df[i] = p_df[i].map(tidy_number)
         print(i, p_df[i].dtypes)
     for i in promotion_df.columns:
         if i not in ['商品名称']:
-            promotion_df[i] = promotion_df[i].astype(np.number)
+            promotion_df[i] = promotion_df[i].map(tidy_number)
         print(i, promotion_df[i].dtypes)
     print("p_df大小", p_df.shape)
     print("promotion_df大小", promotion_df.shape)
@@ -67,6 +77,6 @@ if __name__ == '__main__':
     savepath = '产品分析_{}.csv'
     os.chdir(workpath)
     print(os.getcwd())
-    product = "Product+Analysis 20170701.xls"
-    promotion = "商品推广20170701.xls"
+    product = "Product+Analysis 20170729.xls"
+    promotion = "商品推广20170729.xls"
     anlysis(product, promotion, savepath)
