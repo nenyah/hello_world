@@ -7,24 +7,16 @@ Version:    2016-07-22
 Author:     Steven
 Contact:    lucibriel (at) 163.com
 """
-import asyncio
+from multiprocessing import Pool
+import time
 
-async def wget(host):
-    print('wget %s...' % host)
-    connect = asyncio.open_connection(host, 80)
-    reader, writer = await connect
-    header = 'GET / HTTP/1.0\r\nHost: %s\r\n\r\n' % host
-    writer.write(header.encode('utf-8'))
-    await writer.drain()
-    while True:
-        line = await reader.readline()
-        if line == b'\r\n':
-            break
-        print('%s header > %s' % (host, line.decode('utf-8').rstrip()))
-    # Ignore the body, close the socket
-    writer.close()
 
-loop = asyncio.get_event_loop()
-tasks = [wget(host) for host in ['www.sina.com.cn', 'www.sohu.com', 'www.163.com']]
-loop.run_until_complete(asyncio.wait(tasks))
-loop.close()
+def f(x, y):
+    return x * x + y
+
+if __name__ == '__main__':
+    with Pool(processes=4) as pool:         # start 4 worker processes
+        # evaluate "f(10)" asynchronously in a single process
+        result = pool.apply_async(f, (10, 20))
+        # prints "100" unless your computer is *very* slow
+        print(result.get(timeout=1))

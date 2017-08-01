@@ -5,9 +5,11 @@ from PIL import Image
 import os
 import re
 from multiprocessing import Pool
+import sys
 
 
-def removeLogo(img):
+def remove_logo(img):
+    print("Try to remove {}".format(img))
     if os.path.exists(img):
         im = Image.open(img)
         width, height = im.size
@@ -20,27 +22,27 @@ def removeLogo(img):
             layer.paste(roi, (0, 0))
             out = Image.composite(layer, im, layer)
             out.save(img)
+            return True
         else:
             print("Needn't remove")
+            return False
     else:
         print("File doesn't exists!!")
+        return False
 
 
-def addLogo(img, logo="zhjlut"):
-    if os.path.exists(img):
+def replace_logo(img, logo="robesbon"):
+    print("Try to replace {} logo to {}".format(logo, img))
+    result = remove_logo(img)
+    if result:
         im = Image.open(img)
         width, height = im.size
-        if height / width > 0.875:
-            logo_img = r"E:\Work\06-Work\09-企业相关\商标logo\{}.png".format(logo)
-            logo = Image.open(logo_img)
-            layer = Image.new('RGBA', im.size, (0, 0, 0, 0))
-            layer.paste(logo, (0, 0))
-            out = Image.composite(layer, im, layer)
-            out.save(img)
-        else:
-            print("Needn't addLogo")
-    else:
-        print("File doesn't exists!!")
+        logo_img = r"E:\Work\06-Work\09-企业相关\商标logo\{}.png".format(logo)
+        logo = Image.open(logo_img)
+        layer = Image.new('RGBA', im.size, (0, 0, 0, 0))
+        layer.paste(logo, (0, 0))
+        out = Image.composite(layer, im, layer)
+        out.save(img)
 
 
 def makePath(root, keypath=None, keyword=None):
@@ -52,15 +54,24 @@ def makePath(root, keypath=None, keyword=None):
 
 
 if __name__ == '__main__':
-    path = r"C:\Users\steve\Desktop\图片修改"
+    print(sys.argv, len(sys.argv))
+    if len(sys.argv) == 3:
+        path = sys.argv[-1]
+    elif len(sys.argv) == 5:
+        path = sys.argv[-3]
+        logo = sys.argv[-1]
+    else:
+        print(
+            "Lack enough order!!!\nthe correct order should be: \nptyhon batch_replace_logo.py -p path [-n logo_name]")
+        sys.exit()
+
     imgs = makePath(path, keyword='pImg')
-    print(imgs)
-    p = Pool()
-    p.map(removeLogo, imgs)
-    p.close()
-    p.join()
 
     p = Pool()
-    p.map(addLogo, imgs)
+    for img in imgs:
+        if logo:
+            p.apply_async(replace_logo, args=(img, logo))
+        else:
+            p.apply_async(replace_logo, args=(img, ))
     p.close()
     p.join()
