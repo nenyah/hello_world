@@ -3,7 +3,7 @@
 
 main include:
 
-- [Python ABC]()
+- [Python ABC](https://github.com/nenyah/hello_world/tree/master/Python%20ABC)
 - [Spider](https://github.com/nenyah/hello_world/tree/master/learn%20spider)
 - [Word Cloud](https://github.com/nenyah/hello_world/tree/master/learn%20word%20cloud)
 - [GUI](https://github.com/nenyah/hello_world/tree/master/GUI)
@@ -19,7 +19,7 @@ Most of the code has been classified, there are a small part of the scattered, w
 
 主要包含:
 
-- [Python初学]()
+- [Python初学](https://github.com/nenyah/hello_world/tree/master/Python%20ABC)
 - [爬虫](https://github.com/nenyah/hello_world/tree/master/learn%20spider)
 - [词云制作](https://github.com/nenyah/hello_world/tree/master/learn%20word%20cloud)
 - [图形](https://github.com/nenyah/hello_world/tree/master/GUI)
