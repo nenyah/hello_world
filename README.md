@@ -10,6 +10,8 @@ main include:
 - [learn Data Analysis](https://github.com/nenyah/hello_world/tree/master/learn%20data%20analysis)
 - [Data Analyisis](https://github.com/nenyah/hello_world/tree/master/data%20analysis)
 - [Tool](https://github.com/nenyah/hello_world/tree/master/Tool)
+- [Wechat Robot]
+- [Work App]
 
 Most of the code has been classified, there are a small part of the scattered, will be regularly classified or deleted in the future.
 
@@ -26,5 +28,7 @@ Most of the code has been classified, there are a small part of the scattered, w
 - [数据分析学习](https://github.com/nenyah/hello_world/tree/master/learn%20data%20analysis)
 - [数据分析](https://github.com/nenyah/hello_world/tree/master/data%20analysis)
 - [工具](https://github.com/nenyah/hello_world/tree/master/Tool)
+- [微信机器人]
+- [工作常用]
 
 大部分代码都已经分类，还有少部份零散的，日后会定期分类或者删除。

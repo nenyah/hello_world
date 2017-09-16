@@ -5,6 +5,8 @@ Created on Mon Mar 27 11:06:27 2017
 @author: steve
 @func: 整理线上运费
 """
+import sys
+sys.path.append("..")
 import glob
 import pandas as pd
 from Tool.tool import merge_excel
