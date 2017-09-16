@@ -1,12 +1,11 @@
-#!/usr/bin/env python3.5
-# -*- coding:utf-8 -*-
-"""
-Function:
-获取代理IP
-Version:    2016-07-22
-Author:     Steven
-Contact:    lucibriel (at) 163.com
-"""
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Author: steven
+# @Date:   2017-03-04 14:43:55
+# @email: lucibriel@163.com
+# @Last Modified by:   steve
+# @Last Modified time: 2017-08-08 14:04:46
+
 
 import requests
 from bs4 import BeautifulSoup

@@ -35,6 +35,7 @@ def get_sku(product_num):
     else:
         print('{0} has no sku'.format(product_num))
 
+
 if __name__ == '__main__':
     products_num = '''
     32601892116

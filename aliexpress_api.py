@@ -31,4 +31,6 @@ api = 'http://authhz.alibaba.com/auth/authorize.htm'
 re = requests.get(api, params=params)
 print(re.headers)
 print(re.text)
+with open(r'F:\flaskproject\templates\test.html', 'w+', encoding='utf-8') as f:
+    f.write(re.text)
 print(re.status_code)

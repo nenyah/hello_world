@@ -1,15 +1,4 @@
-# -*- coding: utf-8 -*-
-# @Author: steven
-# @Date:   2017-03-04 14:43:55
-# @Last Modified by:   steven
-# @Last Modified time: 2017-09-16 14:07:32
-"""
-Function:
-获取指定地址文章
-Version:    2016-09-03
-Author:     Steven
-Contact:    lucibriel (at) 163.com
-"""
+# coding=utf-8
 from __future__ import unicode_literals
 
 import logging
@@ -38,10 +27,9 @@ html_template = """
 </html>
 
 """
-file = r"./pdf/"
 
 
-class Crawler:
+class Crawler(object):
     """
     爬虫基类，所有爬虫都应该继承此类
     """
@@ -55,6 +43,8 @@ class Crawler:
         """
         self.name = name
         self.start_url = start_url
+        self.domain = '{uri.scheme}://{uri.netloc}'.format(
+            uri=urlparse(self.start_url))
 
     @staticmethod
     def request(url, **kwargs):
@@ -99,12 +89,11 @@ class Crawler:
         }
         htmls = []
         for index, url in enumerate(self.parse_menu(self.request(self.start_url))):
-            print(url)
             html = self.parse_body(self.request(url))
             f_name = ".".join([str(index), "html"])
-            with open(file + f_name, 'wb') as f:
+            with open(f_name, 'wb') as f:
                 f.write(html)
-            htmls.append(file + f_name)
+            htmls.append(f_name)
         try:
             pdfkit.from_file(htmls, self.name + ".pdf", options=options)
         except:
@@ -115,9 +104,9 @@ class Crawler:
         print(u"总共耗时：%f 秒" % total_time)
 
 
-class SaleCrawler(Crawler):
+class LiaoxuefengPythonCrawler(Crawler):
     """
-    亚马逊运营
+    廖雪峰Python3教程
     """
 
     def parse_menu(self, response):
@@ -127,11 +116,11 @@ class SaleCrawler(Crawler):
         :return: url生成器
         """
         soup = BeautifulSoup(response.content, "lxml")
-        menu_tag = soup.find_all("a", href=re.compile(".*mp.weixin.qq.com/.*"))
-        print(menu_tag)
-        for url in menu_tag:
-            url = url.get("href")
-            # print(url)
+        menu_tag = soup.find_all(class_="uk-nav uk-nav-side")[1]
+        for li in menu_tag.find_all("li"):
+            url = li.a.get("href")
+            if not url.startswith("http"):
+                url = "".join([self.domain, url])  # 补全为全路径
             yield url
 
     def parse_body(self, response):
@@ -141,25 +130,30 @@ class SaleCrawler(Crawler):
         :return: 返回处理后的html文本
         """
         try:
-            soup = BeautifulSoup(response.content, 'lxml')
-            body = soup.find_all(id="img-content")[0]
-            # body.find_all("img")[-2].decompose()
+            soup = BeautifulSoup(response.content, 'html.parser')
+            body = soup.find_all(class_="x-wiki-content")[0]
 
             # 加入标题, 居中显示
-            title = body.h2
-            title.name = "h1"
-            title.wrap(soup.new_tag("center"))
+            title = soup.find('h4').get_text()
+            center_tag = soup.new_tag("center")
+            title_tag = soup.new_tag('h1')
+            title_tag.string = title
+            center_tag.insert(1, title_tag)
+            body.insert(1, center_tag)
 
             html = str(body)
-            p1 = re.compile(r'<script.*"(http.*fmt=.*)";.*script>', re.S)
+            # body中的img标签的src相对路径的改成绝对路径
+            pattern = "(<img .*?src=\")(.*?)(\")"
 
-            def build_img(m):
-                return '<img src="' + m.group(1) + '" />'
-            # body中的img标签的data-src去掉
-            # pattern = "<img(.*?)class="
-            html = p1.sub(build_img, html)
-            html = re.sub('data-src', 'src', html)
-            html = re.sub("重播", "Day", html)
+            def func(m):
+                if not m.group(2).startswith("http"):
+                    rtn = "".join(
+                        [m.group(1), self.domain, m.group(2), m.group(3)])
+                    return rtn
+                else:
+                    return "".join([m.group(1), m.group(2), m.group(3)])
+
+            html = re.compile(pattern).sub(func, html)
             html = html_template.format(content=html)
             html = html.encode("utf-8")
             return html
@@ -168,6 +162,6 @@ class SaleCrawler(Crawler):
 
 
 if __name__ == '__main__':
-    start_url = r"https://mp.weixin.qq.com/s?__biz=MzA4ODY4ODUzNQ==&mid=2663450782&idx=1&sn=30b5160e66c0671df13c8436f6f2ce5f&chksm=8b13fa66bc64737091b196ad4f423adc16609ec4353a5d2a5bc4a42a4236e6e123ec729b9eb3&mpshare=1&scene=23&srcid=0914OIDCGHUY9WcqL2HW6Gxf#rd"
-    crawler = SaleCrawler("顾小北", start_url)
+    start_url = "https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000"
+    crawler = LiaoxuefengPythonCrawler("廖雪峰Python", start_url)
     crawler.run()

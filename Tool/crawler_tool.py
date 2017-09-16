@@ -1,4 +1,10 @@
-import requests
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Author: steven
+# @Date:   2017-05-08 15:07:44
+# @email: lucibriel@163.com
+# @Last Modified by:   steve
+# @Last Modified time: 2017-08-21 10:36:38
 import re
 import random
 import time
@@ -80,5 +86,6 @@ class download():
                 else:
                     print(u'代理也不好使了！取消代理')
                     return self.get(url, 3)
+
 
 request = download()

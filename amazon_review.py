@@ -80,5 +80,5 @@ if __name__ == '__main__':
     df = pd.DataFrame()
     for url in get_urls(url):
         df = df.append(get_info(url, asin), ignore_index=True)
-    df.to_csv('{}.csv'.format(asin), index=False)
+    df.to_csv(f'{asin}.csv', index=False)
     print(df.info())

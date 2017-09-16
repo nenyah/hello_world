@@ -1,9 +1,10 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Nov  4 15:41:56 2016
-
-@author: steve
-"""
+# @Author: steven
+# @Date:   2017-05-08 15:07:44
+# @email: lucibriel@163.com
+# @Last Modified by:   steve
+# @Last Modified time: 2017-08-08 14:04:22
 
 import requests
 from bs4 import BeautifulSoup
@@ -18,7 +19,6 @@ urls_list = fangcan['urls_list']
 item_info = fangcan['item_info']
 
 
-
 def get_list_url(url):
     data = []
     web = request.get(url, 3)
@@ -27,7 +27,8 @@ def get_list_url(url):
     max_page = soup.select('.PagerCss a')[-1]['href'].split('=')[-1]
 
     for page in range(1, int(max_page) + 1):
-        list_url = 'http://newhouse.cnnbfdc.com/lpxx.aspx?p={0}'.format(str(page))
+        list_url = 'http://newhouse.cnnbfdc.com/lpxx.aspx?p={0}'.format(
+            str(page))
         html = requests.get(list_url, headers=headers)
         soup = BeautifulSoup(html.text, 'lxml')
         all_a = soup.select(".sp_zi12c")
@@ -42,20 +43,22 @@ def get_list_url(url):
     # return data
 
 
-
 def get_detail(page_url):
     html = request.get(page_url, 3)
     detail = BeautifulSoup(html.text, 'lxml')
-    item_names = [info.text.strip().replace('：', '') for info in detail.select('.sp_f12')][:30]
+    item_names = [info.text.strip().replace('：', '')
+                  for info in detail.select('.sp_f12')][:30]
     if '地图定位' in item_names:
         item_names.remove('地图定位')
-    item_content = [info.text.strip().replace(' ', '').replace('\r','').replace('\n','') for info in detail.select('.e_hs12')][5:30]
+    item_content = [info.text.strip().replace(' ', '').replace(
+        '\r', '').replace('\n', '') for info in detail.select('.e_hs12')][5:30]
 
     info = dict()
     for name, content in zip(item_names, item_content):
         info['url'] = page_url
         info[name] = content
     item_info.insert_one(info)
+
 
 def get_rest_of_url():
     db_url = [item['url'] for item in urls_list.find()]
@@ -68,7 +71,7 @@ def get_rest_of_url():
     rest_of_url = x - y
     return rest_of_url
 
-if __name__=='__main__':
+if __name__ == '__main__':
     url = 'http://newhouse.cnnbfdc.com/lpxx.aspx'
     pool = Pool()
     while len(get_rest_of_url()) != 0:

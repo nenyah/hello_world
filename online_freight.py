@@ -7,21 +7,7 @@ Created on Mon Mar 27 11:06:27 2017
 """
 import glob
 import pandas as pd
-
-# 攻取目标目录所有
-
-
-def get_data(path=r'./*.xls', on=None):
-    """合并数据"""
-    all_data = pd.DataFrame()
-    for f in glob.glob(path):
-        df = pd.read_excel(f)
-#        print(len(df))
-        all_data = all_data.append(df, ignore_index=True)
-    if on:
-        return all_data.drop_duplicates(on)
-    else:
-        return all_data
+from Tool.tool import merge_excel
 
 
 # 整理数据
@@ -36,8 +22,8 @@ def tidy_data(df):
     return group_df
 
 if __name__ == '__main__':
-    path = r'E:\Work\06-Work\00-Todo\线上运费\20170729\*.xls'
-    df = get_data(path)
+    path = r'E:\Work\06-Work\00-Todo\线上运费\20170905'
+    df = merge_excel(path)
     df = tidy_data(df)
     print(df)
     df.to_clipboard()

@@ -85,7 +85,7 @@ def draw_scatter(x, y):
 def save(df, path):
     """存入excel"""
     this_month = arrow.now().month
-    excel_name = 'Mon {} profit.xlsx'.format(str(this_month))
+    excel_name = f'Mon {str(this_month)} profit.xlsx'
     sheet_name = ['loss', 'profit', 'country_loss',
                   'store', 'cat', 'courier', 'total']
     cols = ['销量', '利润/￥', '销售额/￥', '单个销售额/￥', '单个利润/￥', '利润率']
@@ -114,9 +114,9 @@ def save(df, path):
 
 if __name__ == '__main__':
     os.chdir(r"E:\Work\06-Work\Data Anlysis\Profit Loss\2017")
-    path = r".\Mon07\Mon07_product.xls"
+    path = r".\Mon08\Mon08_product.xls"
     df = get_data(path)
     today = arrow.now().format('MM-DD')
     df.to_csv(today + " test.csv", index=False)
-    t_path = r'.\Mon07'
+    t_path = r'.\Mon08'
     save(df, t_path)
