@@ -14,7 +14,7 @@ def remove_logo(img):
         im = Image.open(img)
         width, height = im.size
         if height / width > 0.875:
-            box = (0, 0, 220, 220)
+            box = (0, 0, 220, 230)
             roi = im.crop(box)
             roi = roi.point(lambda i: i**0 * 255)
 
