@@ -4,7 +4,7 @@
 # @Date:   2017-03-04 14:43:55
 # @email: lucibriel@163.com
 # @Last Modified by:   steven
-# @Last Modified time: 2017-09-16 16:58:45
+# @Last Modified time: 2017-09-30 14:00:47
 import os
 import sys
 import pandas as pd
@@ -43,7 +43,7 @@ def save(df, save_path=None):
     df.to_csv(os.path.join(path, "total.csv"), index=False)
 
 
-def merge_excel(path, remove_duplicate=True):
+def merge_excel(path, remove_duplicate=False, on=None):
     """merge excel not matter single file or path"""
     if not os.path.exists(path):
         print("Path dosen't exists")
@@ -60,7 +60,7 @@ def merge_excel(path, remove_duplicate=True):
         df = pd.concat(df, axis=0)
         df = df.dropna(thresh=5)
         if remove_duplicate:
-            df = df.drop_duplicates(df.columns[1])
+            df = df.drop_duplicates(on)
     return df
 
 

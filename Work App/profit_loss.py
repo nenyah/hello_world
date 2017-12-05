@@ -31,7 +31,7 @@ def get_cat(item):
 
 def get_data(path):
     """导入表格，做预处理"""
-    cols = ['erp_id', 'order_id', 'img_url', 'SKU列表',
+    cols = ['erp_id', 'order_id', 'img_url', 'SKUS',
             'courier', 'channel', 'track_number', 'price', 'weight',
             'weight_cal', 'get_money', 'purchase', 'freight',
             'package_fee', 'profit', 'paid_time', 'store', 'ship_time',
@@ -40,11 +40,12 @@ def get_data(path):
     df = pd.read_excel(path, headers=1)
     # 替换标题
     df.columns = cols
-    df = df[~df['SKU列表'].str.contains('<br/>')]
-    df['SKU列表'] = df['SKU列表'].str.split("*")
-    df['sku'] = df['SKU列表'].map(lambda x: x[0])
-    df['sale_num'] = df['SKU列表'].map(lambda x: x[-1])
-    del df['SKU列表']
+    df = df[~df['order_id'].str.startswith('r')]
+    df = df[~df['SKUS'].str.contains('<br/>')]
+    df['SKUS'] = df['SKUS'].str.split("*")
+    df['sku'] = df['SKUS'].map(lambda x: x[0])
+    df['sale_num'] = df['SKUS'].map(lambda x: x[-1])
+    del df['SKUS']
 
     # 类型更换
     df.erp_id = df.erp_id.astype(object)
@@ -55,6 +56,7 @@ def get_data(path):
     df['SPU'] = df.sku.map(lambda x: x[:7])
     df['attr'] = df.sku.map(lambda x: x[7:].split("-")[-1])
     df['cat'] = df.SPU.map(get_cat)
+    df['vendor'] = df.SPU.map(lambda x: x[2:3])
     df = df.dropna(subset=['get_money', 'freight'])
     return df
 
@@ -114,9 +116,9 @@ def save(df, path):
 
 if __name__ == '__main__':
     os.chdir(r"E:\Work\06-Work\Data Anlysis\Profit Loss\2017")
-    path = r".\Mon08\Mon08_product.xls"
+    path = r".\Mon09\Mon09_product.xls"
     df = get_data(path)
     today = arrow.now().format('MM-DD')
     df.to_csv(today + " test.csv", index=False)
-    t_path = r'.\Mon08'
+    t_path = r'.\Mon09'
     save(df, t_path)

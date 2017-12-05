@@ -24,7 +24,7 @@ def tidy_data(df):
     return group_df
 
 if __name__ == '__main__':
-    path = r'E:\Work\06-Work\00-Todo\线上运费\20170905'
+    path = r'E:\Work\06-Work\00-Todo\线上运费\20171031'
     df = merge_excel(path)
     df = tidy_data(df)
     print(df)

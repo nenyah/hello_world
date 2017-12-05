@@ -2,7 +2,7 @@
 # @Author: steven
 # @Date:   2017-01-20 14:13:56
 # @Last Modified by:   steven
-# @Last Modified time: 2017-09-16 13:03:51
+# @Last Modified time: 2017-12-02 14:50:19
 # @email: lucibriel@163.com
 
 
@@ -38,9 +38,9 @@ def cal(df):
     return df
 
 
-def change_type(df):
+def change_type(df, filter_cols=['商品ID', '商品标题', '平台', '商品名称']):
     for i in df.columns:
-        if i not in ['商品ID', '商品标题', '平台', '商品名称']:
+        if i not in filter_cols:
             df[i] = df[i].map(tidy_number)
     return df
 
@@ -59,7 +59,7 @@ def anlysis(product, promotion, savepath):
     result.to_csv('test1.csv', index=False)
 
     output_col = ['日期', '商品ID', '商品标题', '实际曝光量', '浏览量',
-                  '访客数', 'R点击率', '转化率', '买家数', '订单数',
+                  '访客数', '点击率', '转化率', '买家数', '订单数',
                   '支付金额', '客单价', 'P4P', 'P4P占比']
     anlysis = result.sort_values('支付订单数', ascending=False).head(20)
     anlysis.rename(columns={'搜索曝光量': '实际曝光量',
@@ -77,10 +77,10 @@ def anlysis(product, promotion, savepath):
 
 
 if __name__ == '__main__':
-    workpath = "E:\\Work\\06-Work\\Data Anlysis\\03-商品数据\\"
+    workpath = r"E:\Work\06-Work\Data Anlysis\03-商品数据\2017"
     savepath = '产品分析_{}.csv'
     os.chdir(workpath)
     print(os.getcwd())
-    product = "Product+Analysis 20170916.xls"
-    promotion = "商品推广20170916.xls"
+    product = "Product+Analysis 20171202.xls"
+    promotion = "商品推广20171202.xls"
     anlysis(product, promotion, savepath)

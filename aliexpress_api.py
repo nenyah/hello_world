@@ -3,6 +3,7 @@ import hmac
 import hashlib
 import mod_config
 
+
 # appKey和签名串
 
 appKey = mod_config.getConfig("aliexpressAPI", "appKey")

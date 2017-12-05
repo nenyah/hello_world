@@ -20,7 +20,7 @@ headers = {
 def get_html(path):
     try:
         reps = requests.get(path, headers=headers)
-        time.sleep(3)
+        time.sleep(5)
         print(reps.status_code)
         print("Begin to cralw: {}".format(path))
         return reps
@@ -52,3 +52,12 @@ def save_data(path):
     with open(today + "-discount.txt", "a") as file:
         for pid, discount in parse_html(reps):
             file.write(f"{pid},{discount}\n")
+
+
+def test():
+    for path in paths:
+        print(path)
+        save_data(path)
+
+if __name__ == '__main__':
+    test()
