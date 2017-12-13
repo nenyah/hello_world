@@ -2,7 +2,7 @@
 # @Author: steven
 # @Date:   2017-01-20 14:13:56
 # @Last Modified by:   steven
-# @Last Modified time: 2017-12-02 14:50:19
+# @Last Modified time: 2017-12-08 14:48:05
 # @email: lucibriel@163.com
 
 
@@ -12,8 +12,8 @@ import arrow
 import os
 
 
-def get_date(days):
-    return arrow.now().shift(days=-days).format("YYYY-MM-DD")
+def get_date(days=0, slash=""):
+    return arrow.now().shift(days=-days).format(f"YYYY{slash}MM{slash}DD")
 
 
 def tidy_number(el):
@@ -26,7 +26,7 @@ def tidy_number(el):
 
 
 def cal(df):
-    df['日期'] = get_date(2)
+    df['日期'] = get_date(2, slash="-")
     df['R点击率'] = df['访客数'] / df['实际曝光量']
     df['转化率'] = df['买家数'] / df['访客数']
     df['客单价'] = df['支付金额'] / df['买家数']
@@ -72,7 +72,7 @@ def anlysis(product, promotion, savepath):
 
     anlysis = cal(anlysis)
     anlysis = anlysis.ix[:, output_col]
-    date = get_date(2)
+    date = get_date(2, slash="-")
     anlysis.to_csv(savepath.format(date), index=False)
 
 
@@ -81,6 +81,7 @@ if __name__ == '__main__':
     savepath = '产品分析_{}.csv'
     os.chdir(workpath)
     print(os.getcwd())
-    product = "Product+Analysis 20171202.xls"
-    promotion = "商品推广20171202.xls"
+    product = f"Product+Analysis {str(get_date())}.xls"
+    promotion = f"商品推广{str(get_date())}.xls"
     anlysis(product, promotion, savepath)
+    # print(product, '\n', promotion)

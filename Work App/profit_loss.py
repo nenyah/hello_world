@@ -37,7 +37,8 @@ def get_data(path):
             'package_fee', 'profit', 'paid_time', 'store', 'ship_time',
             'country'
             ]
-    df = pd.read_excel(path, headers=1)
+
+    df = pd.read_excel(path, header=1)
     # 替换标题
     df.columns = cols
     df = df[~df['order_id'].str.startswith('r')]
@@ -116,9 +117,9 @@ def save(df, path):
 
 if __name__ == '__main__':
     os.chdir(r"E:\Work\06-Work\Data Anlysis\Profit Loss\2017")
-    path = r".\Mon09\Mon09_product.xls"
+    path = r".\Mon10\Mon10_product.xls"
     df = get_data(path)
     today = arrow.now().format('MM-DD')
     df.to_csv(today + " test.csv", index=False)
-    t_path = r'.\Mon09'
+    t_path = r'.\Mon10'
     save(df, t_path)

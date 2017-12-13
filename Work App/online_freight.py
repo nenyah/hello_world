@@ -10,9 +10,15 @@ sys.path.append("..")
 import glob
 import pandas as pd
 from Tool.tool import merge_excel
+import arrow
+import os
 
 
+def get_date(days=0, slash=""):
+    return arrow.now().shift(days=-days).format(f"YYYY{slash}MM{slash}DD")
 # 整理数据
+
+
 def tidy_data(df):
     # 退货保险项重量置0
     df.loc[df['费用项'] == '退货保险费', '订单重量'] = 0
@@ -24,7 +30,7 @@ def tidy_data(df):
     return group_df
 
 if __name__ == '__main__':
-    path = r'E:\Work\06-Work\00-Todo\线上运费\20171031'
+    path = os.path.join(r"E:\Work\06-Work\00-Todo\线上运费", get_date())
     df = merge_excel(path)
     df = tidy_data(df)
     print(df)

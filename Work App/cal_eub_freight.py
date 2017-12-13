@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: steven
 # @Date:   2017-05-13 17:14:35
-# @Last Modified by:   steven
-# @Last Modified time: 2017-12-02 14:29:48
+# @Last Modified by:   steve
+# @Last Modified time: 2017-12-13 10:37:16
 '''
  author: lucibriel@163.com
  fun: 计算E邮宝运费
@@ -42,17 +42,18 @@ def test():
     df = pd.read_excel(path)
     eub = Epacket()
     freight = []
-    for track in df['快递单号']:
-        is_track = df['快递单号'] == track
-        country = df[is_track]['国家'].values[0].lower()
-        weight = df[is_track]['实际重量(g)'].values[0]
+    for track_code, country, weight in zip(df['快递单号'],
+                                           df['国家'],
+                                           df['实际重量(g)']):
+        country = country.lower()
         try:
             cost = eub.get_price(country, weight)
-            print(cost)
+            print(track_code, country, weight, cost)
             freight.append(cost)
         except:
-            print(track)
-    # print(freight)
+            freight.append(None)
+            print(track_code, "Error")
+
     df['结算运费'] = pd.Series(freight)
     df = df.loc[:, ['快递单号', '实际重量(g)', '结算运费']]
     df.columns = ['物流单号', '结算重量', '结算运费']
@@ -61,4 +62,5 @@ def test():
 
 if __name__ == '__main__':
     test()
-    # print(calc_eub('france', 899))
+    # eub = Epacket()
+    # print(eub.get_price('ukraine', 460))
