@@ -16,30 +16,33 @@ headers = {
 
 
 def get_urls(url):
-    urls = []
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.text, 'lxml')
     dd = soup.find_all('dd')
     for i in range(len(dd)):
         a = dd[i].find('a')['href']
         full_url = 'http://www.xieyixs.com' + a
-        urls.append(full_url)
-        print(full_url)
-    return urls
+        # print(full_url)
+        yield full_url
+
 
 # url = 'http://www.xieyixs.com/xy2408/3658793.html'
 
 
 def get_content(url):
     time.sleep(3)
-    response = requests.get(url, headers=headers)
+    print("Try to get content from: {}".format(url))
+    try:
+        response = requests.get(url, headers=headers)
+    except:
+        print("Error: {}".format(url))
     soup = BeautifulSoup(response.text, 'lxml')
     content = soup.find('p', 'pdp').text
     return content
 
 
 def save(content):
-    with open(r'content.txt', 'a+') as f:
+    with open(r'content.txt', 'a+', encoding="utf-8") as f:
         f.write(content)
 
 if __name__ == '__main__':

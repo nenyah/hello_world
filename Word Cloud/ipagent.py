@@ -5,7 +5,6 @@ import re
 from multiprocessing import Pool
 
 
-
 USER_AGENTS = [
     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
     "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)",
@@ -26,87 +25,90 @@ USER_AGENTS = [
 ]
 
 headers = {
-	'User-Agent':random.choice(USER_AGENTS)
+    'User-Agent': random.choice(USER_AGENTS)
 }
+
+
 def isExsitIP():
-	path = r'C:\Users\steve\Desktop\ips_valid.txt'
-	if os.path.exists(path):
-		with open(r'C:\Users\steve\Desktop\ips_valid.txt','r') as f:
-			PROXIES = f.read().split('\n')
-		proxies = {
-			'http': random.choice(PROXIES)
-		}
-		return True
-	return False
+    path = r'C:\Users\steve\Desktop\ips_valid.txt'
+    if os.path.exists(path):
+        with open(r'C:\Users\steve\Desktop\ips_valid.txt', 'r') as f:
+            PROXIES = f.read().split('\n')
+        proxies = {
+            'http': random.choice(PROXIES)
+        }
+        return True
+    return False
 
 IP_POOL = []
 
 # 获取最大页码
+
+
 def getMaxPage():
-	url = 'http://www.xicidaili.com/nn/'
-	r = requests.get(url, headers=headers).text
-	soup = BeautifulSoup(r, 'lxml')
-	max_page = soup.find('div','pagination').text.split()[-3]
-	return int(max_page)
+    url = 'http://www.xicidaili.com/nn/'
+    r = requests.get(url, headers=headers).text
+    soup = BeautifulSoup(r, 'lxml')
+    max_page = soup.find('div', 'pagination').text.split()[-3]
+    return int(max_page)
 
 
 # 检验IP
 def checkIP(ip):
-	# 检验地址:
-	check_url = "http://ip.chinaz.com/getip.aspx"
-	proxies={'http':ip}
-	print('CHCEK: {0}'.format(proxies))
-	try:
-		r = requests.get(
-			check_url, 
-			headers=headers, 
-			proxies=proxies, 
-			timeout = 5
-			)
-		r.raise_for_status()
-	except requests.RequestException as e:
-		print(e)
-	else:
-		if r.status_code == 200:
-			print('{0} is valid.'.format(ip))
-			with open('ips_valid.txt','a+') as f:
-				f.write(ip+'\n')
-			return True
-	return False
+    # 检验地址:
+    check_url = "http://ip.chinaz.com/getip.aspx"
+    proxies = {'http': ip}
+    print('CHCEK: {0}'.format(proxies))
+    try:
+        r = requests.get(
+            check_url,
+            headers=headers,
+            proxies=proxies,
+            timeout=5
+        )
+        r.raise_for_status()
+    except requests.RequestException as e:
+        print(e)
+    else:
+        if r.status_code == 200:
+            print('{0} is valid.'.format(ip))
+            with open('ips_valid.txt', 'a+') as f:
+                f.write(ip + '\n')
+            return True
+    return False
 
 
 # 获取IP
 def getIP(url):
-	if isExsitIP():
-		r = requests.get(url, headers=headers, proxies=proxies).text
-	else:
-		r = requests.get(url, headers=headers).text
-	soup = BeautifulSoup(r, 'lxml')
-	isExist = True if soup.find('tr', class_='odd') else False
-	ips = soup.find_all('tr')
-	if isExist:
-		for x in range(1,len(ips)):
-			ip = ips[x]
-			tds = ip.find_all("td")
-			# print(tds[1].contents[0])
-			ip_temp = tds[5].string.lower()+'://'+tds[1].string+":"+tds[2].string
-			print('GET {0}'.format(ip_temp))
-			# 检验IP
-			if checkIP(ip_temp):
-				IP_POOL.append(ip_temp)
+    if isExsitIP():
+        r = requests.get(url, headers=headers, proxies=proxies).text
+    else:
+        r = requests.get(url, headers=headers).text
+    soup = BeautifulSoup(r, 'lxml')
+    isExist = True if soup.find('tr', class_='odd') else False
+    ips = soup.find_all('tr')
+    if isExist:
+        for x in range(1, len(ips)):
+            ip = ips[x]
+            tds = ip.find_all("td")
+            # print(tds[1].contents[0])
+            ip_temp = tds[5].string.lower() + '://' + \
+                tds[1].string + ":" + tds[2].string
+            print('GET {0}'.format(ip_temp))
+            # 检验IP
+            if checkIP(ip_temp):
+                IP_POOL.append(ip_temp)
 
-	# return ip_pool
+    # return ip_pool
 
 
-
-
-if __name__=="__main__":
-	urls = ['http://www.xicidaili.com/nn/{0}'.format(str(i)) 
-		for i in range(1,getMaxPage())]
-	p = Pool(4)
-	for i in urls:
-		p.apply_async(getIP, args=(i,))
-	print('>>> Start to get IP...')
-	p.close()
-	p.join()
-	print('>>> ALL IP get success.')
+if __name__ == "__main__":
+    urls = ['http://www.xicidaili.com/nn/{0}'.format(str(i))
+            for i in range(1, getMaxPage())]
+    p = Pool(4)
+    for i in urls:
+        p.apply_async(getIP, args=(i,))
+    print('>>> Start to get IP...')
+    p.close()
+    p.join()
+    print('>>> ALL IP get success.')

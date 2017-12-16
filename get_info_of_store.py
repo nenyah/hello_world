@@ -7,8 +7,9 @@ import re
 from bs4 import BeautifulSoup
 import arrow
 
-paths = [r"https://naturalhome.aliexpress.com/store/518251/search/{0}.html".format(str(i))
-         for i in range(1, 9)]
+end_page = 4
+paths = (r"https://naturalhome.aliexpress.com/store/518251/search/{0}.html".format(str(i))
+         for i in range(1, end_page + 1))
 
 today = arrow.now().format("YY-MM-DD")
 
