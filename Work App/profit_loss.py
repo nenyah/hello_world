@@ -116,10 +116,10 @@ def save(df, path):
         sum_spu.to_excel(writer, sheet_name[-1])
 
 if __name__ == '__main__':
-    os.chdir(r"E:\Work\06-Work\Data Anlysis\Profit Loss\2017")
-    path = r".\Mon10\Mon10_product.xls"
+    os.chdir(r"F:\Work\06-Work\Data Anlysis\Profit Loss\2017")
+    path = r".\Mon12\Mon12_product.xls"
     df = get_data(path)
     today = arrow.now().format('MM-DD')
     df.to_csv(today + " test.csv", index=False)
-    t_path = r'.\Mon10'
+    t_path = r'.\Mon12'
     save(df, t_path)

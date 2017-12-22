@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+# @Author: Steven
+# @Date:   2017-12-19 13:55:24
+# @Last Modified by:   Steven
+# @Last Modified time: 2017-12-19 14:12:16
+
 import requests
 import hmac
 import hashlib

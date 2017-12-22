@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: steven
 # @Date:   2017-05-13 17:14:35
-# @Last Modified by:   steve
-# @Last Modified time: 2017-12-13 10:37:16
+# @Last Modified by:   Steven
+# @Last Modified time: 2017-12-21 14:12:32
 '''
  author: lucibriel@163.com
  fun: 计算E邮宝运费
@@ -37,8 +37,8 @@ class Epacket:
 
 
 def test():
-    os.chdir(r"F:\workspace")
-    path = r"Epacket.xlsx"
+    os.chdir(r"F:\Work\06-Work\00-Todo\Freight\EMS")
+    path = r"eub.xlsx"
     df = pd.read_excel(path)
     eub = Epacket()
     freight = []

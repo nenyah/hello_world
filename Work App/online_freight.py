@@ -30,7 +30,7 @@ def tidy_data(df):
     return group_df
 
 if __name__ == '__main__':
-    path = os.path.join(r"E:\Work\06-Work\00-Todo\线上运费", get_date())
+    path = os.path.join(r"F:\Work\06-Work\00-Todo\线上运费", get_date())
     df = merge_excel(path)
     df = tidy_data(df)
     print(df)

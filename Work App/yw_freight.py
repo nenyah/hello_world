@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: steven
 # @Date:   2017-09-05 15:02:45
-# @Last Modified by:   steve
-# @Last Modified time: 2017-12-13 10:41:00
+# @Last Modified by:   Steven
+# @Last Modified time: 2017-12-21 14:08:07
 import glob
 import os
 import pandas as pd
@@ -44,7 +44,7 @@ def save(file):
     print(f'Done: {filename}')
 
 if __name__ == '__main__':
-    path = r'E:\Work\06-Work\00-Todo\Freight\燕文\*.xl*'
+    path = r'F:\Work\06-Work\00-Todo\Freight\燕文\*.xl*'
     p = Pool()
     for file in get_files(path):
         p.apply_async(save, (file,))
