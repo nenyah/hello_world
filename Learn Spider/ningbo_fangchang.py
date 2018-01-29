@@ -3,8 +3,8 @@
 # @Author: steven
 # @Date:   2017-05-08 15:07:44
 # @email: lucibriel@163.com
-# @Last Modified by:   steve
-# @Last Modified time: 2017-08-08 14:04:22
+# @Last Modified by:   Steven
+# @Last Modified time: 2018-01-27 16:29:19
 
 import requests
 from bs4 import BeautifulSoup
@@ -12,13 +12,15 @@ import pymongo
 from multiprocessing import Pool
 import time
 from crawler_tool import request
+from fake_useragent import UserAgent
 
 client = pymongo.MongoClient('localhost', 27017)
 fangcan = client['fangcan']
 urls_list = fangcan['urls_list']
 item_info = fangcan['item_info']
 
-
+ua = UserAgent()
+headers = {'User-Agent': ua.random}
 def get_list_url(url):
     data = []
     web = request.get(url, 3)
@@ -38,7 +40,7 @@ def get_list_url(url):
             info = {'name': title, 'url': href}
             print('Get list info: {0}'.format(info))
             urls_list.insert_one(info)
-    #         print(info)
+            # print(info)
     #         data.append(info)
     # return data
 
@@ -73,6 +75,7 @@ def get_rest_of_url():
 
 if __name__ == '__main__':
     url = 'http://newhouse.cnnbfdc.com/lpxx.aspx'
+    # get_list_url(url)
     pool = Pool()
     while len(get_rest_of_url()) != 0:
         pool.map(get_detail, get_rest_of_url())

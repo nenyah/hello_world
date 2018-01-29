@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: steven
 # @Date:   2017-01-20 14:13:56
-# @Last Modified by:   steven
-# @Last Modified time: 2017-12-08 14:48:05
+# @Last Modified by:   Steven
+# @Last Modified time: 2018-01-05 15:28:20
 # @email: lucibriel@163.com
 
 
@@ -33,7 +33,7 @@ def cal(df):
     df['P4P占比'] = df['P4P'] / (df['支付金额'] * 6.5)
     df['客单价'] = df['客单价'].map(lambda x: round(x, 2))
     df['转化率'] = df['转化率'].map('{:.2%}'.format)
-    df['点击率'] = df['点击率'].map('{:.2%}'.format)
+    df['R点击率'] = df['R点击率'].map('{:.2%}'.format)
     df['P4P占比'] = df['P4P占比'].map('{:.2%}'.format)
     return df
 
@@ -59,7 +59,7 @@ def anlysis(product, promotion, savepath):
     result.to_csv('test1.csv', index=False)
 
     output_col = ['日期', '商品ID', '商品标题', '实际曝光量', '浏览量',
-                  '访客数', '点击率', '转化率', '买家数', '订单数',
+                  '访客数', 'R点击率', '转化率', '买家数', '订单数',
                   '支付金额', '客单价', 'P4P', 'P4P占比']
     anlysis = result.sort_values('支付订单数', ascending=False).head(20)
     anlysis.rename(columns={'搜索曝光量': '实际曝光量',
@@ -77,11 +77,11 @@ def anlysis(product, promotion, savepath):
 
 
 if __name__ == '__main__':
-    workpath = r"E:\Work\06-Work\Data Anlysis\03-商品数据\2017"
+    workpath = r"F:\Work\06-Work\Data Anlysis\03-商品数据\2018"
     savepath = '产品分析_{}.csv'
     os.chdir(workpath)
     print(os.getcwd())
     product = f"Product+Analysis {str(get_date())}.xls"
-    promotion = f"商品推广{str(get_date())}.xls"
+    promotion = f"商品推广 {str(get_date())}.xls"
     anlysis(product, promotion, savepath)
     # print(product, '\n', promotion)

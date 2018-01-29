@@ -3,19 +3,20 @@
 # @Author: steven
 # @Date:   2017-03-04 14:43:55
 # @email: lucibriel@163.com
-# @Last Modified by:   steven
-# @Last Modified time: 2017-09-30 14:00:47
+# @Last Modified by:   Steven
+# @Last Modified time: 2018-01-20 16:28:40
 import os
 import sys
 import pandas as pd
+from pathlib import Path
 
 
-def get_file_names(path):
+def get_file_names(path, pedix=None):
     """get all file name in path"""
-    for i in os.walk(path):
-        for filename in i[-1]:
-            full_filename = os.path.join(i[0], filename)
-            yield full_filename
+    p = Path(path)
+    if pedix:
+        return p.glob(f'**/*.{pedix}*')
+    return p.glob(f'**/*.*')
 
 
 def merge_excel_from_sheets(xls, on=None):
@@ -45,18 +46,18 @@ def save(df, save_path=None):
 
 def merge_excel(path, remove_duplicate=False, on=None):
     """merge excel not matter single file or path"""
-    if not os.path.exists(path):
+    p = Path(path)
+    if not p.exists():
         print("Path dosen't exists")
         return None
     if is_xls(path):
         df = merge_excel_from_sheets(path)
 
-    if os.path.isdir(path):
-        files = get_file_names(path)
+    if p.is_dir():
+        files = get_file_names(path, 'xls')
         df = dict()
         for file in files:
-            if is_xls(file):
-                df[file] = merge_excel_from_sheets(file)
+            df[file] = merge_excel_from_sheets(file)
         df = pd.concat(df, axis=0)
         df = df.dropna(thresh=5)
         if remove_duplicate:
@@ -65,6 +66,6 @@ def merge_excel(path, remove_duplicate=False, on=None):
 
 
 if __name__ == '__main__':
-    path = r'E:\Work\06-Work\00-Todo\线上运费\20170905'
-    df = merge_excel_from_path(path)
+    path = r'F:\Work\06-Work\Data Anlysis\00-订单数据\2017订单数据\01-OS'
+    df = merge_excel(path, True, '订单号')
     save(df)

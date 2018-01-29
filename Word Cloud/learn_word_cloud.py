@@ -1,52 +1,76 @@
 # coding:utf-8
 __author__ = 'Steven Tan'
 
-import jieba
-import requests
+
+from crawler_tool import request
 import time
 from bs4 import BeautifulSoup
-# from multiprocessing import Pool
+from multiprocessing import Pool
+import os
+from fake_useragent import UserAgent
 
-url = 'http://www.xieyixs.com/xy2408/'
+path = r'E:\hello_world\Word Cloud\儒道至圣'
+
+if os.path.exists(path):
+    os.chdir(path)
+else:
+    os.makedirs(path)
+
+ua = UserAgent()
+
+class ReaderSpider:
+    """docstring for ReaderSpider"""
+
+    def __init__(self, url, title):
+        self.url = url
+        self.title = title
+        self.site = 'http://' + self.url.split('/')[2]
+        self.count = 0
+        self.menu = []
+        self.headers = {'User-Agent': ua.random}
+
+    def get_menu(self):
+        temp = []
+        response = request.get(self.url,3)
+        soup = BeautifulSoup(response.text, 'lxml')
+        dd = soup.find_all('dd')
+        for i in range(len(dd)):
+            a = dd[i].find('a')['href']
+            full_url = '{0}{1}'.format(self.site, a)
+            temp.append(full_url)
+        return temp
+
+    def get_content(self, url):
+        time.sleep(3)
+        try:
+            response = request.get(url,3)
+        except:
+            print("Error")
+        soup = BeautifulSoup(response.text, 'lxml')
+        title = soup.find('h1').text
+        content = soup.find('p', 'pdp').text
+        content = '\n'.join(content.split())
+        self.save(content,title)
+
+    def save(self, content, title):
+        print(title, 'Success')
+        with open(title + '.txt', 'w', encoding="utf-8") as f:
+            f.write(content)
 
 
-headers = {
-    'USER_AGENTS': "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)"
-}
+    def run(self):
+        start = time.time()
+        self.menu = self.get_menu()
+        p = Pool()
+        for index,url in enumerate(self.menu):
+            p.apply_async(self.get_content, (url, ))
+        p.close()
+        p.join()
+        total_time = time.time() - start
+        print(u"总共耗时：{0} 秒".format(total_time))
 
-
-def get_urls(url):
-    response = requests.get(url, headers=headers)
-    soup = BeautifulSoup(response.text, 'lxml')
-    dd = soup.find_all('dd')
-    for i in range(len(dd)):
-        a = dd[i].find('a')['href']
-        full_url = 'http://www.xieyixs.com' + a
-        # print(full_url)
-        yield full_url
-
-
-# url = 'http://www.xieyixs.com/xy2408/3658793.html'
-
-
-def get_content(url):
-    time.sleep(3)
-    print("Try to get content from: {}".format(url))
-    try:
-        response = requests.get(url, headers=headers)
-    except:
-        print("Error: {}".format(url))
-    soup = BeautifulSoup(response.text, 'lxml')
-    content = soup.find('p', 'pdp').text
-    return content
-
-
-def save(content):
-    with open(r'content.txt', 'a+', encoding="utf-8") as f:
-        f.write(content)
 
 if __name__ == '__main__':
-    # p = Pool(4)
     url = 'http://www.xieyixs.com/xy2408/'
-    for url in get_urls(url):
-        save(get_content(url))
+    rs = ReaderSpider(url, '儒道至圣')
+    rs.run()
