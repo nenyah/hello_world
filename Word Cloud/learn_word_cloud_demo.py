@@ -7,6 +7,26 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 from os import path
 from scipy.misc import imread
+import shutil
+from pathlib import Path
+
+
+def get_file_names(path, pedix=None):
+    """get all file name in path"""
+    p = Path(path)
+    if pedix:
+        return p.glob(f'**/*.{pedix}*')
+    return p.glob(f'**/*.*')
+
+
+file = r"E:\workspace\儒道至圣"
+# for path in get_file_names(file):
+#     with open(path,'r', encoding='utf-8') as f:
+#         content = f.read()
+#     with open(r'E:\workspace\total.txt','a+', encoding='utf-8') as f:
+#         f.write(content)
+#         f.write('\n')
+#     print(path)
 
 # 当前目录
 d = path.dirname(__file__)
@@ -14,8 +34,8 @@ d = path.dirname(__file__)
 
 delwords = '【大家可以好好的看书，但是要注意研究休息哦，我们的网站更新最快最好，免费无弹窗广告，热血小说网：www.xieyixs.com，百度xieyixs就可以了】'
 segments = []
-content = path.join(d, "content-c.txt")
-with open(content, 'r') as f:
+file = r"E:\workspace\total.txt"
+with open(file, 'r', encoding='utf-8') as f:
     content = f.read().replace(delwords, '')
     content = content.replace('方运道', '方运')
     # print(content)

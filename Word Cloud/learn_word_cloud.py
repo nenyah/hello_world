@@ -7,16 +7,7 @@ import time
 from bs4 import BeautifulSoup
 from multiprocessing import Pool
 import os
-from fake_useragent import UserAgent
 
-path = r'E:\hello_world\Word Cloud\儒道至圣'
-
-if os.path.exists(path):
-    os.chdir(path)
-else:
-    os.makedirs(path)
-
-ua = UserAgent()
 
 class ReaderSpider:
     """docstring for ReaderSpider"""
@@ -27,11 +18,10 @@ class ReaderSpider:
         self.site = 'http://' + self.url.split('/')[2]
         self.count = 0
         self.menu = []
-        self.headers = {'User-Agent': ua.random}
 
     def get_menu(self):
         temp = []
-        response = request.get(self.url,3)
+        response = request.get(self.url, 3)
         soup = BeautifulSoup(response.text, 'lxml')
         dd = soup.find_all('dd')
         for i in range(len(dd)):
@@ -43,26 +33,32 @@ class ReaderSpider:
     def get_content(self, url):
         time.sleep(3)
         try:
-            response = request.get(url,3)
+            response = request.get(url, 3)
         except:
-            print("Error")
+            print(f"{url} Error")
         soup = BeautifulSoup(response.text, 'lxml')
-        title = soup.find('h1').text
-        content = soup.find('p', 'pdp').text
+        title = soup.find('h1').text.strip()
+        content = soup.find(id='content').text
         content = '\n'.join(content.split())
-        self.save(content,title)
+        self.save(content, title)
 
     def save(self, content, title):
+        path = fr'E:\workspace\{self.title}'
+        if os.path.exists(path):
+            os.chdir(path)
+        else:
+            os.makedirs(path)
+            os.chdir(path)
+
         print(title, 'Success')
         with open(title + '.txt', 'w', encoding="utf-8") as f:
             f.write(content)
-
 
     def run(self):
         start = time.time()
         self.menu = self.get_menu()
         p = Pool()
-        for index,url in enumerate(self.menu):
+        for index, url in enumerate(self.menu):
             p.apply_async(self.get_content, (url, ))
         p.close()
         p.join()

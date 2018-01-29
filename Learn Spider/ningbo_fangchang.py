@@ -4,7 +4,7 @@
 # @Date:   2017-05-08 15:07:44
 # @email: lucibriel@163.com
 # @Last Modified by:   Steven
-# @Last Modified time: 2018-01-27 16:29:19
+# @Last Modified time: 2018-01-29 14:02:45
 
 import requests
 from bs4 import BeautifulSoup
@@ -12,15 +12,15 @@ import pymongo
 from multiprocessing import Pool
 import time
 from crawler_tool import request
-from fake_useragent import UserAgent
+import arrow
+
 
 client = pymongo.MongoClient('localhost', 27017)
 fangcan = client['fangcan']
 urls_list = fangcan['urls_list']
 item_info = fangcan['item_info']
 
-ua = UserAgent()
-headers = {'User-Agent': ua.random}
+
 def get_list_url(url):
     data = []
     web = request.get(url, 3)
@@ -31,7 +31,7 @@ def get_list_url(url):
     for page in range(1, int(max_page) + 1):
         list_url = 'http://newhouse.cnnbfdc.com/lpxx.aspx?p={0}'.format(
             str(page))
-        html = requests.get(list_url, headers=headers)
+        html = request.get(list_url, 3)
         soup = BeautifulSoup(html.text, 'lxml')
         all_a = soup.select(".sp_zi12c")
         for a in all_a:
@@ -39,24 +39,30 @@ def get_list_url(url):
             href = 'http://newhouse.cnnbfdc.com/' + a['href']
             info = {'name': title, 'url': href}
             print('Get list info: {0}'.format(info))
-            urls_list.insert_one(info)
+            if urls_list.find({'url':info['url']}):
+                urls_list.insert_one(info)
             # print(info)
     #         data.append(info)
     # return data
 
 
+def tidy_content(content):
+    return content.strip().replace(' ', '').replace(
+        '\r', '').replace('\n', '').replace('\xa0地图定位', '').replace('：','')
+
 def get_detail(page_url):
     html = request.get(page_url, 3)
     detail = BeautifulSoup(html.text, 'lxml')
-    item_names = [info.text.strip().replace('：', '')
-                  for info in detail.select('.sp_f12')][:30]
+    item_names = [tidy_content(info.text)
+                  for info in detail.select('.sp_f12')][:29]
     if '地图定位' in item_names:
         item_names.remove('地图定位')
-    item_content = [info.text.strip().replace(' ', '').replace(
-        '\r', '').replace('\n', '') for info in detail.select('.e_hs12')][5:30]
-
+    item_content = [tidy_content(info.text) for info in detail.select('td.e_hs12')][2:30]
+    # print(item_names, len(item_names))
+    # print(item_content, len(item_content))
     info = dict()
     for name, content in zip(item_names, item_content):
+        info['date'] = arrow.now().format(f"YYYY-MM-DD")
         info['url'] = page_url
         info[name] = content
     item_info.insert_one(info)
@@ -73,9 +79,11 @@ def get_rest_of_url():
     rest_of_url = x - y
     return rest_of_url
 
+
 if __name__ == '__main__':
     url = 'http://newhouse.cnnbfdc.com/lpxx.aspx'
-    # get_list_url(url)
+    get_list_url(url)
     pool = Pool()
     while len(get_rest_of_url()) != 0:
         pool.map(get_detail, get_rest_of_url())
+

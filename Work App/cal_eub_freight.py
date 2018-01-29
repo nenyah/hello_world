@@ -2,7 +2,7 @@
 # @Author: steven
 # @Date:   2017-05-13 17:14:35
 # @Last Modified by:   Steven
-# @Last Modified time: 2018-01-20 09:14:52
+# @Last Modified time: 2018-01-29 09:57:09
 '''
  author: lucibriel@163.com
  fun: 计算E邮宝运费
@@ -59,6 +59,7 @@ def test():
     df.columns = ['物流单号', '结算重量', '结算运费']
     df.to_csv("计算结果.csv", index=False)
     df.to_clipboard(index=False)
+
 
 if __name__ == '__main__':
     test()

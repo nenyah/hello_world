@@ -2,7 +2,7 @@
 # @Author: steven
 # @Date:   2017-09-05 15:02:45
 # @Last Modified by:   Steven
-# @Last Modified time: 2018-01-02 16:15:19
+# @Last Modified time: 2018-01-29 09:57:05
 import glob
 import os
 import pandas as pd
@@ -42,6 +42,7 @@ def save(file):
     df = parse_data(file)
     df.to_excel(file, index=False)
     print(f'Done: {filename}')
+
 
 if __name__ == '__main__':
     path = r'F:\Work\06-Work\00-Todo\Freight\燕文\*.xl*'
