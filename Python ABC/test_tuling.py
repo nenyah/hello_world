@@ -37,6 +37,7 @@ def tuling_reply(msg):
     # 有内容一般就是指非空或者非None，你可以用`if a: print('True')`来测试
     return reply or defaultReply
 
+
 # 为了让实验过程更加方便（修改程序不用多次扫码），我们使用热启动
 itchat.auto_login(hotReload=True)
 itchat.run()

@@ -4,7 +4,7 @@
 # @Date:   2017-05-08 15:07:44
 # @email: lucibriel@163.com
 # @Last Modified by:   Steven
-# @Last Modified time: 2018-01-29 09:07:34
+# @Last Modified time: 2018-01-31 13:40:39
 import re
 import random
 import time
@@ -24,11 +24,14 @@ class download():
             i = re.sub('\n', '', ip)  # re.sub 是re模块替换的方法，这儿表示将\n替换为空
             self.iplist.append(i.strip())  # 添加到我们上面初始化的list里面
 
-
-    def get(self, url, timeout, proxy=None, num_retries=6):  # 给函数一个默认参数proxy为空
+    def get(self, url, timeout, proxy=None, refferer=None, num_retries=6):  # 给函数一个默认参数proxy为空
         # 从self.user_agent_list中随机取出一个字符串
         ua = UserAgent()
-        headers = {'User-Agent': ua.random}  # 构造成一个完整的User-Agent （UA代表的是上面随机取出来的字符串哦）
+        # 构造成一个完整的User-Agent （UA代表的是上面随机取出来的字符串哦）
+        headers = {'User-Agent': ua.random,
+                   'Connection': 'Keep-Alive',
+                   'Referer': refferer
+                   }
 
         if proxy is None:  # 当代理为空时，不使用代理获取response（别忘了response啥哦！之前说过了！！）
             try:

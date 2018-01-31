@@ -9,6 +9,7 @@ Contact:    lucibriel (at) 163.com
 """
 import os
 from os.path import join, getsize
+from multiprocessing import Pool
 
 
 def getdirsize(dir, path=r'size.csv'):
@@ -25,8 +26,10 @@ def getdirsize(dir, path=r'size.csv'):
         except WindowsError:
             pass
 
+
 if __name__ == '__main__':
-    getdirsize(r'c:\\')
-    getdirsize(r'd:\\')
-    getdirsize(r'e:\\')
-    getdirsize(r'f:\\')
+    p = Pool()
+    for i in ['C:\\', 'd:\\', 'e:\\', 'f:\\']:
+        p.apply_async(getdirsize, (i,))
+    p.close()
+    p.join()
