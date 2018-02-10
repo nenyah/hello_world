@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: steven
 # @Date:   2017-09-01 09:55:44
-# @Last Modified by:   steven
-# @Last Modified time: 2017-09-01 10:26:08
+# @Last Modified by:   Steven
+# @Last Modified time: 2018-02-06 16:19:02
 import itchat
 import numpy as np
 import pandas as pd
@@ -34,6 +34,7 @@ def get_count(Sequence):
     for x in Sex:
         counts[x] += 1
     return counts
+
 
 Sex = df_friends.Sex
 Sex_count = get_count(Sex)
@@ -90,7 +91,7 @@ with open(file_name, 'w', encoding='utf-8') as f:
 wordlist = jieba.cut(text, cut_all=True)
 word_space_split = ' '.join(wordlist)
 # 词云的背景和颜色。这张图片在本地。
-coloring = np.array(Image.open("../learn word cloud/image/mask.png"))
+coloring = np.array(Image.open(r"E:\hello_world\Word Cloud\image\mask.png"))
 
 my_wordcloud = WordCloud(background_color="white",
                          max_words=2000,

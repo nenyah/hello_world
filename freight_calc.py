@@ -31,6 +31,7 @@ def get_ref(path=r'freight_standard.xls'):
     df.columns = ['country', 'price']
     return df
 
+
 df = get_ref()
 
 

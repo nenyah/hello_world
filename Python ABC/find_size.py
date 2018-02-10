@@ -30,6 +30,6 @@ def getdirsize(dir, path=r'size.csv'):
 if __name__ == '__main__':
     p = Pool()
     for i in ['C:\\', 'd:\\', 'e:\\', 'f:\\']:
-        p.apply_async(getdirsize, (i,))
+        p.apply_async(getdirsize, (i, r'E:\workspace\size.csv'))
     p.close()
     p.join()

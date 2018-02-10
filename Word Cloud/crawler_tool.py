@@ -4,7 +4,7 @@
 # @Date:   2017-05-08 15:07:44
 # @email: lucibriel@163.com
 # @Last Modified by:   Steven
-# @Last Modified time: 2018-01-29 09:56:49
+# @Last Modified time: 2018-02-02 10:57:53
 import re
 import random
 import time
@@ -38,11 +38,11 @@ class download():
 
                 if num_retries > 0:  # num_retries是我们限定的重试次数
                     time.sleep(10)  # 延迟十秒
-                    print(u'获取网页出错，10S后将获取倒数第：', num_retries, u'次')
+                    print('获取网页出错，10S后将获取倒数第：', num_retries, '次')
                     # 调用自身 并将次数减1
                     return self.get(url, timeout, num_retries - 1)
                 else:
-                    print(u'开始使用代理')
+                    print('开始使用代理')
                     time.sleep(10)
                     IP = ''.join(
                         str(random.choice(self.iplist)).strip())  # 下面有解释哦
@@ -62,11 +62,11 @@ class download():
                     time.sleep(10)
                     IP = ''.join(str(random.choice(self.iplist)).strip())
                     proxy = {'http': IP}
-                    print(u'正在更换代理，10S后将重新获取倒数第', num_retries, u'次')
-                    print(u'当前代理是：', proxy)
+                    print('正在更换代理，10S后将重新获取倒数第', num_retries, '次')
+                    print('当前代理是：', proxy)
                     return self.get(url, timeout, proxy, num_retries - 1)
                 else:
-                    print(u'代理也不好使了！取消代理')
+                    print('代理也不好使了！取消代理')
                     return self.get(url, 3)
 
 
