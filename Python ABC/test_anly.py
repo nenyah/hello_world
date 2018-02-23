@@ -11,10 +11,6 @@ import glob
 import re
 import os
 
-path = "F:\\Work\\06-Work\\Data Anlysis\\00-订单数据\\2017订单数据\\"
-
-# merge data
-
 
 def change_to_datetime(df):
     for name in ['bid_time', 'pay_time', 'comfirm_time']:
@@ -51,38 +47,16 @@ def merge_excel(path, on=None):
         return all_data
 
 
-df = merge_excel(path, 'oid')
-# df.to_csv('total.csv', index=False)
-
-
-# def tidy_product_sku(df):
-#     product_info = {}
-#     for info in df['product']:
-#         if len(info) > 1:
-#             # print(info)
-#             for detail in info:
-#                 if detail[-2] in product_info:
-#                     product_info[detail[-2]] += int(detail[-1])
-#                 else:
-#                     product_info[detail[-2]] = int(detail[-1])
-#         else:
-#             if info[0][-2] in product_info:
-#                 product_info[info[0][-2]] += int(info[0][-1])
-#             else:
-#                 product_info[info[0][-2]] = int(info[0][-1])
-#     return product_info
-
-
 def bracrepl(matchobj):
     '''remove ( )'''
     if matchobj.group(0) == '(' or matchobj.group(0) == ')':
         return ''
 
 
-product_list = []
+def tidy_product(df, product_list=None):
+    if product_list is None:
+        product_list = []
 
-
-def tidy_product(df):
     for oid, bid_time, info, store in zip(df['oid'], df['bid_time'], df['product'], df['store']):
         product_info = {}
         if len(info) > 1:
@@ -104,7 +78,7 @@ def tidy_product(df):
                 product_list.append(product_info)
             except:
                 print(bid_time, info, oid, store)
-# Binning:
+        return product_list
 
 
 def binning(col, cut_points, labels=None):
@@ -124,34 +98,13 @@ def binning(col, cut_points, labels=None):
     return colBin
 
 
-# Binning age:
-# cut_points = [5, 10, 15, 20, 25, 30, 35, 40, 50, 60]
-# df['colprice'] = binning(df['total'], cut_points)
-# pd.value_counts(df['colprice'], sort=False)
-
-# clean product
-
-
 def tidy(x):
+    '''clean product'''
     temp = re.sub('[(|)]', bracrepl, x)
     if '产品属性' in temp:
-        return re.findall(u'产品属性:(.*)\n商家编码:(.*)\n产品数量:(\d+)', temp)
+        return re.findall('产品属性:(.*)\n商家编码:(.*)\n产品数量:(\d+)', temp)
     else:
-        return re.findall(u'商家编码:(.*)\n产品数量:(\d+)', temp)
-
-
-df['product'] = df['product'].map(tidy)
-print(df['product'].head())
-tidy_product(df)
-df.to_csv(r'E:\workspace\total_order.csv', index=False)
-produt_df = pd.DataFrame(product_list)
-print(produt_df.head())
-produt_df.to_csv(r'E:\workspace\product.csv', index=False)
-# print(df['product'].head())
-# 读入数据
-# df = pd.read_csv(path)
-# print(df.head())
-# gourp
+        return re.findall('商家编码:(.*)\n产品数量:(\d+)', temp)
 
 
 def group(df, by='store', drop=[]):
@@ -161,40 +114,59 @@ def group(df, by='store', drop=[]):
         return df.dropna(subset=drop).groupby(['store']).sum()
 
 
-# cols = ['oid', 'pay_time', 'amount',
-#         'freight', 'total', 'store']
+if __name__ == '__main__':
 
-# df = df.sort_values(by='bid_time')
-# df_paid = df[df['pay_time'].notnull()]
-# df_paid = df_paid.set_index('bid_time')
-# paid_amount_by_time = df_paid.resample('H').sum()
-# last = paid_amount_by_time[['total']]
-# last.columns = ['total_paid']
-# print(last)
-# print(df.index)
-# df2 = df.set_index('bid_time')
-# amount_by_time = df2.resample('H').sum()
-# order_by_time = df2.resample('H').count()
-# right = amount_by_time[['total']]
-# right.columns = ['total_order']
-# print(right)
-#order_by_time['pay_rate'] = order_by_time['pay_time']/order_by_time['oid']
-#order_by_time['pay_rate'] = order_by_time['pay_rate'].map(lambda x: "{:.2%}".format(x))
-#order_by_time['amount'] = amount_by_time['total']
-#left = order_by_time[['oid','pay_time','pay_rate']]
-# print(left)
-#total = pd.concat([left,right, last], axis=1)
-# print(total)
-# total.to_csv('/home/steven/Documents/total_amount_by_time.csv')
-# group by country
+    path = "F:\\Work\\06-Work\\Data Anlysis\\00-订单数据\\2017订单数据"
+    df = merge_excel(path, 'oid')
+    df['product'] = df['product'].map(tidy)
+    print(df['product'].head())
+    product_list = tidy_product(df)
+    df.to_csv(r'E:\workspace\total_order.csv', index=False)
+    produt_df = pd.DataFrame(product_list)
+    print(produt_df.head())
+    produt_df.to_csv(r'E:\workspace\product.csv', index=False)
+    # Binning age:
+    cut_points = [5, 10, 15, 20, 25, 30, 35, 40, 50, 60]
+    df['colprice'] = binning(df['total'], cut_points)
+    print(pd.value_counts(df['colprice'], sort=False))
+    # gourp
 
-#print("bid amount:")
-#store_df = group(df)
-# print(store_df)
-# print(store_df.sum())
-#print("paid amount:")
-#store_df = group(df, 'store', ['pay_time'])
-# print(store_df)
-# print(store_df.sum())
-#order_status_df = group(df, 'order_status')
-# print(order_status_df)
+    cols = ['oid', 'pay_time', 'amount',
+            'freight', 'total', 'store']
+
+    df = df.sort_values(by='bid_time')
+    df_paid = df[df['pay_time'].notnull()]
+    df_paid = df_paid.set_index('bid_time')
+    paid_amount_by_time = df_paid.resample('H').sum()
+    last = paid_amount_by_time[['total']]
+    last.columns = ['total_paid']
+    print(last.head())
+    print(df.index)
+    df2 = df.set_index('bid_time')
+    amount_by_time = df2.resample('H').sum()
+    order_by_time = df2.resample('H').count()
+    right = amount_by_time[['total']]
+    right.columns = ['total_order']
+    print(right.head())
+    order_by_time['pay_rate'] = order_by_time['pay_time'] / \
+        order_by_time['oid']
+    order_by_time['pay_rate'] = order_by_time['pay_rate'].map(
+        lambda x: "{:.2%}".format(x))
+    order_by_time['amount'] = amount_by_time['total']
+    left = order_by_time[['oid', 'pay_time', 'pay_rate']]
+    print(left.head())
+    total = pd.concat([left, right, last], axis=1)
+    # print(total)
+    total.to_csv(r'E:\workspace\total_amount_by_time.csv')
+    # group by country
+
+    print("bid amount:")
+    store_df = group(df)
+    print(store_df)
+    print(store_df.sum())
+    print("paid amount:")
+    store_df = group(df, 'store', ['pay_time'])
+    print(store_df)
+    print(store_df.sum())
+    order_status_df = group(df, 'order_status')
+    print(order_status_df)
