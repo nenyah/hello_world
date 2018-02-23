@@ -2,13 +2,14 @@
 # coding:utf-8
 __author__ = 'Steven Tan'
 
+import shutil
+from os import path
+from pathlib import Path
+
 import jieba
 import matplotlib.pyplot as plt
-from wordcloud import WordCloud
-from os import path
 from scipy.misc import imread
-import shutil
-from pathlib import Path
+from wordcloud import WordCloud
 
 
 def get_file_names(path, pedix=None):

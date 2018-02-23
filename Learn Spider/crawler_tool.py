@@ -5,9 +5,10 @@
 # @email: lucibriel@163.com
 # @Last Modified by:   Steven
 # @Last Modified time: 2018-02-02 10:56:04
-import re
 import random
+import re
 import time
+
 import requests
 from fake_useragent import UserAgent
 

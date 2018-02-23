@@ -2,11 +2,13 @@
 __author__ = 'Steven Tan'
 
 
-from crawler_tool import request
-import time
-from bs4 import BeautifulSoup
-from multiprocessing import Pool
 import os
+import time
+from multiprocessing import Pool
+
+from bs4 import BeautifulSoup
+
+from crawler_tool import request
 
 
 class ReaderSpider:
@@ -63,7 +65,7 @@ class ReaderSpider:
         p.close()
         p.join()
         total_time = time.time() - start
-        print(u"总共耗时：{0} 秒".format(total_time))
+        print("总共耗时：{0} 秒".format(total_time))
 
 
 if __name__ == '__main__':

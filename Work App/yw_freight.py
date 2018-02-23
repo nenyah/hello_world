@@ -5,8 +5,9 @@
 # @Last Modified time: 2018-01-29 09:57:05
 import glob
 import os
-import pandas as pd
 from multiprocessing import Pool
+
+import pandas as pd
 
 
 def get_files(path):
@@ -23,7 +24,7 @@ def append_columns(df):
         df['结算重量'] = df['重量']
         df['结算运费'] = df['汇总金额']
     return df
- 
+
 
 def parse_data(file):
     xlsx = pd.ExcelFile(file)

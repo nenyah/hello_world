@@ -1,11 +1,13 @@
 #!/usr/bin/env python3.5
 # -*- coding:utf-8 -*-
-# from crawler_tool import requests
-import requests
-import time
 import re
-from bs4 import BeautifulSoup
+import time
+
 import arrow
+
+from bs4 import BeautifulSoup
+
+from crawler_tool import request
 
 end_page = 4
 paths = (r"https://naturalhome.aliexpress.com/store/518251/search/{0}.html".format(str(i))
@@ -20,7 +22,7 @@ headers = {
 
 def get_html(path):
     try:
-        reps = requests.get(path, headers=headers)
+        reps = request.get(path, 6)
         time.sleep(5)
         print(reps.status_code)
         print("Begin to cralw: {}".format(path))

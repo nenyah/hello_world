@@ -7,8 +7,9 @@
 # @Last Modified time: 2018-01-20 16:28:40
 import os
 import sys
-import pandas as pd
 from pathlib import Path
+
+import pandas as pd
 
 
 def get_file_names(path, pedix=None):
