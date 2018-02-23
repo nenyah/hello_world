@@ -19,13 +19,13 @@ class Epacket:
         df['country'] = df['country'].str.split(',')
         self.df = df
 
-    def __calcs__(self, country):
+    def __calcs(self, country):
         is_country = self.df['country'].map(lambda x: country in x)
         calcs = self.df[is_country].T.to_dict()[self.df[is_country].index[0]]
         return calcs
 
     def get_price(self, country, weight):
-        calcs = self.__calcs__(country)
+        calcs = self.__calcs(country)
         if weight <= calcs['first_weight']:
             price = calcs['r1_price'] * \
                 calcs['first_weight'] + calcs['r1_handle']

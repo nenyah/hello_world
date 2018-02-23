@@ -24,16 +24,15 @@ class Hassless:
         df['country'] = df['country'].str.split(',')
         self.df = df
 
-    def __calcs__(self, country):
+    def __calcs(self, country):
         is_country = self.df['country'].map(lambda x: country in x)
         calcs = self.df[is_country].T.to_dict()[self.df[is_country].index[0]]
         return calcs
 
     def get_price(self, country, weight):
-        calcs = self.__calcs__(country)
+        calcs = self.__calcs(country)
         price = calcs['price']*weight*0.001 + calcs['handle']
         return price
-
 
 
 if __name__ == '__main__':

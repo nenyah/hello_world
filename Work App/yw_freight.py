@@ -23,7 +23,7 @@ def append_columns(df):
         df['结算重量'] = df['重量']
         df['结算运费'] = df['汇总金额']
     return df
-
+ 
 
 def parse_data(file):
     xlsx = pd.ExcelFile(file)

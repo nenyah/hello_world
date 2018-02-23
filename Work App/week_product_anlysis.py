@@ -6,10 +6,11 @@
 # @email: lucibriel@163.com
 
 
-import pandas as pd
-import numpy as np
-import arrow
 import os
+
+import arrow
+import numpy as np
+import pandas as pd
 
 
 def get_date(days=0, slash=""):
@@ -32,9 +33,10 @@ def cal(df):
     df['客单价'] = df['支付金额'] / df['买家数']
     df['P4P占比'] = df['P4P'] / (df['支付金额'] * 6.5)
     df['客单价'] = df['客单价'].map(lambda x: round(x, 2))
-    df['转化率'] = df['转化率'].map('{:.2%}'.format)
-    df['R点击率'] = df['R点击率'].map('{:.2%}'.format)
-    df['P4P占比'] = df['P4P占比'].map('{:.2%}'.format)
+    formater = '{:.2%}'.format
+    df['转化率'] = df['转化率'].map(formater)
+    df['R点击率'] = df['R点击率'].map(formater)
+    df['P4P占比'] = df['P4P占比'].map(formater)
     return df
 
 
