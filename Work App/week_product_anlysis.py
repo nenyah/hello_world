@@ -2,7 +2,7 @@
 # @Author: steven
 # @Date:   2017-01-20 14:13:56
 # @Last Modified by:   Steven
-# @Last Modified time: 2018-01-05 15:28:20
+# @Last Modified time: 2018-03-02 16:37:33
 # @email: lucibriel@163.com
 
 
@@ -26,8 +26,13 @@ def tidy_number(el):
     return float(el)
 
 
-def cal(df):
-    df['日期'] = get_date(2, slash="-")
+def format_date(date):
+    return f"{date[:4]}-{date[4:6]}-{date[6:]}"
+
+
+def cal(df, date=None):
+    df['日期'] = get_date(
+        2, slash="-") if not date else format_date(date)
     df['R点击率'] = df['访客数'] / df['实际曝光量']
     df['转化率'] = df['买家数'] / df['访客数']
     df['客单价'] = df['支付金额'] / df['买家数']
@@ -47,7 +52,7 @@ def change_type(df, filter_cols=['商品ID', '商品标题', '平台', '商品�
     return df
 
 
-def anlysis(product, promotion, savepath):
+def anlysis(product, promotion, savepath, date=None):
     p_df = pd.read_excel(product)
     p_df = p_df[p_df['平台'] == "TOTAL"]
     promotion_df = pd.read_excel(promotion)
@@ -72,10 +77,24 @@ def anlysis(product, promotion, savepath):
                                       '花费': 'P4P'}, inplace=True)
     anlysis.ix[anlysis['P4P'].isnull(), 'P4P'] = 0
 
-    anlysis = cal(anlysis)
+    anlysis = cal(anlysis, date)
     anlysis = anlysis.ix[:, output_col]
-    date = get_date(2, slash="-")
-    anlysis.to_csv(savepath.format(date), index=False)
+    today = get_date(2, slash="-")
+    if date is None:
+        anlysis.to_csv(savepath.format(today), index=False)
+    else:
+        anlysis.to_csv(savepath.format(date), index=False)
+
+
+def run(date=None):
+    if date is None:
+        product = f"Product+Analysis {str(get_date())}.xls"
+        promotion = f"商品推广 {str(get_date())}.xls"
+        anlysis(product, promotion, savepath)
+    else:
+        product = f"Product+Analysis {date}.xls"
+        promotion = f"商品推广 {date}.xls"
+        anlysis(product, promotion, savepath, date)
 
 
 if __name__ == '__main__':
@@ -83,7 +102,5 @@ if __name__ == '__main__':
     savepath = '产品分析_{}.csv'
     os.chdir(workpath)
     print(os.getcwd())
-    product = f"Product+Analysis {str(get_date())}.xls"
-    promotion = f"商品推广 {str(get_date())}.xls"
-    anlysis(product, promotion, savepath)
+    run()
     # print(product, '\n', promotion)

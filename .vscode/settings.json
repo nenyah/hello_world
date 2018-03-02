@@ -4,5 +4,7 @@
     "editor.fontSize": 16,
     "workbench.colorTheme": "Monokai",
     "editor.fontFamily": "Consolas",
-    "editor.wordWrap": "on"
+    "editor.wordWrap": "on",
+    "git.autofetch": true,
+
 }
