@@ -1,1 +1,7 @@
 /.metadata/
+dance+sneaker.csv
+.settings
+.idea
+.ipynb_checkpoints
+.metadata
+.vscode
