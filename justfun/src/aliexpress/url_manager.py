@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
 # Created on 2018年3月9日
 # @author: Administrator
-from urllib.parse import quote_plus
 
 
 class UrlManager(object):
     def __init__(self):
         self.new_urls = set()
         self.old_urls = set()
-        self.site = 'http://www.dhgate.com/w/{0}/{1}.html'
-
-    def build_url(self, key_word, page_num):
-        key_word = quote_plus(key_word)
-        for url in [self.site.format(key_word, page) for page in range(page_num)]:
-            self.add_new_url(url)
 
     def add_new_url(self, url):
         if url is None:
@@ -32,3 +25,9 @@ class UrlManager(object):
     def show_urls(self):
         for url in self.new_urls:
             print(url)
+
+    def add_new_urls(self, urls):
+        if urls is None or len(urls) == 0:
+            return
+        for url in urls:
+            self.add_new_url(url)

@@ -34,20 +34,20 @@ def get_html(path):
 def parse_html(content):
     soup = BeautifulSoup(content.text, 'lxml')
     # print(soup)
-    ul = soup.find("ul", class_="items-list")
-    item = ul.find_all('li', class_="item")
-    print(len(item))
+
+    item = soup.find_all('li', class_="item")
+
     for info in item:
         check_h3 = True if info.find('h3') else False
         check_discount = True if info.find(class_="discount") else False
-        print(check_h3)
+
         if check_h3:
             p_url = info.h3.a.get("href")
             pid = p_url.split("_")[-1].split(".")[0]
             discount = info.find(class_="discount").text.strip(
             ) if check_discount else None
             print(pid, discount)
-            yield (pid, discount)
+            yield pid, discount
 
 
 def save_data(path):
