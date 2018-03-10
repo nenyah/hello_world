@@ -1,13 +1,13 @@
-#!/usr/bin/env python3.5
-# -*- coding:utf-8 -*-
+# -*- coding: utf-8 -*- 
+# @Author: Steven 
+# @Date: 2017-12-19 13:55:23 
+# @Last Modified by: Steven 
+# @Last Modified time: 2018-03-09 15:39:04 
+# @file: dhgate_1.0.py
+
 """
 Function:
 通过关键词，获取指定页数的产品价格与销售数量
-Version:    2017-04-09
-Author:     Steven
-Contact:    lucibriel (at) 163.com
-modify:     重构dhgate.py
-file:       dhgate_1.0.py
 """
 
 import requests
@@ -16,17 +16,17 @@ import re
 from urllib.parse import quote_plus
 import sys
 from numpy import mean
+import csv
 
 
-def buildUrl(keyword="women shoes", page=1):
+def build_url(keyword="women shoes", page=1):
     key_word = quote_plus(keyword)
     urls = (
         'http://www.dhgate.com/w/{0}/{1}.html'.format(key_word, str(i)) for i in range(page))
-    for url in urls:
-        yield url
+    return urls
 
 
-def getData(url, data=None):
+def get_data(url, data=None):
     data = []
     web_data = requests.get(url)
     soup = BeautifulSoup(web_data.text, 'lxml')
@@ -62,13 +62,20 @@ def getData(url, data=None):
     return data
 
 
-def saveData(data, path='dhgate.csv'):
-    print(data)
-    # with open(path, 'a') as f:
-    # 	f.write('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n'.format())
+def write_to_csv(data,header, path='dhgate.csv'):
+    print(data[0].keys())
+    with open(path, 'a', newline="") as f:
+        writer = csv.DictWriter(f,data[0].keys())
+        writer.writeheader()
+        for info in data:
+            print(info)
+            writer.writerow(info)
+
 
 
 if __name__ == '__main__':
-    urls = buildUrl()
-    data = [getData(url) for url in urls]
-    saveData(data)
+    urls = build_url(page=2)
+    data = []
+    for url in urls:
+        data.extend(get_data(url))
+    save_data(data)

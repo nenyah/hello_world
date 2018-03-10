@@ -2,7 +2,7 @@
 # @Author: steven
 # @Date:   2017-05-13 17:14:35
 # @Last Modified by:   Steven
-# @Last Modified time: 2018-01-29 09:57:09
+# @Last Modified time: 2018-03-09 11:07:10
 '''
  author: lucibriel@163.com
  fun: 计算E邮宝运费
@@ -15,17 +15,33 @@ class Epacket:
 
     def __init__(self):
         path = os.path.join(os.path.split(__file__)[0], "epacket.xlsx")
-        df = pd.read_excel(path)
-        df['country'] = df['country'].str.split(',')
-        self.df = df
+        with pd.ExcelFile(path) as xls:
+            fee_df = pd.read_excel(xls, 'standard')
+            discount_df = pd.read_excel(xls, 'discount')
+        fee_df['country'] = fee_df['country'].str.split(',')
+        discount_df['country'] = discount_df['country'].str.split(',')
+        self.fee_df = fee_df
+        self.discount_df = discount_df
+
+    def __discount(self, country, weight, start=False):
+        is_country = self.discount_df['country'].map(lambda x: country in x)
+        target = self.discount_df[is_country & (
+            self.discount_df['weight'] <= weight)]
+        if len(target) and start:
+            discount = round(target['discount'].values[-1], 3)
+        else:
+            discount = 1
+        return discount
 
     def __calcs(self, country):
-        is_country = self.df['country'].map(lambda x: country in x)
-        calcs = self.df[is_country].T.to_dict()[self.df[is_country].index[0]]
+        is_country = self.fee_df['country'].map(lambda x: country in x)
+        calcs = self.fee_df[is_country].T.to_dict(
+        )[self.fee_df[is_country].index[0]]
         return calcs
 
     def get_price(self, country, weight):
         calcs = self.__calcs(country)
+        discount = self.__discount(country, weight)
         if weight <= calcs['first_weight']:
             price = calcs['r1_price'] * \
                 calcs['first_weight'] + calcs['r1_handle']
@@ -33,7 +49,7 @@ class Epacket:
             price = calcs['r1_price'] * weight + calcs['r1_handle']
         else:
             price = calcs['r2_price'] * weight + calcs['r2_handle']
-        return price
+        return price * discount
 
 
 def test():
@@ -50,9 +66,9 @@ def test():
             cost = eub.get_price(country, weight)
             print(track_code, country, weight, cost)
             freight.append(cost)
-        except:
+        except Exception as e:
             freight.append(None)
-            print(track_code, "Error")
+            print(track_code, e)
 
     df['结算运费'] = pd.Series(freight)
     df = df.loc[:, ['快递单号', '实际重量(g)', '结算运费']]
