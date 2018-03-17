@@ -25,7 +25,7 @@ def merge_excel(path, on=None):
             for filename in i[-1]:
                 full_filename = os.path.join(i[0], filename)
                 df = pd.read_excel(full_filename)
-                df['store'] = full_filename.split('#')[-1][:2]
+#                df['store'] = full_filename.split('#')[-1][:2]
                 all_data = all_data.append(df, ignore_index=True)
     else:
         all_data = pd.read_csv(path, encoding='gb2312', engine="python")

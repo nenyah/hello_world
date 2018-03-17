@@ -1,4 +1,9 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*- 
+# @Author: Steven 
+# @Date: 2018-02-24 15:07:55 
+# @Last Modified by: Steven 
+# @Last Modified time: 2018-03-14 14:02:05 
+# @file: game_functions.py
 # @Author: Steven
 # @Date:   2018-02-24 15:07:55
 # @Last Modified by:   Steven
@@ -8,6 +13,7 @@ import pygame
 from bulllet import Bullet
 from alien import Alien
 from time import sleep
+import random
 
 
 def check_high_score(stats, sb):
@@ -81,9 +87,11 @@ def create_alien(ai_settings, screen, aliens, alien_number, row_number):
     """创建一个外星人并将其放在当前行"""
     alien = Alien(ai_settings, screen)
     alien_width = alien.rect.width
-    alien.x = alien_width + 2 * alien_width * alien_number
+    alien.x = random.randint(0, ai_settings.screen_width)
+    # alien_width + 2 * alien_width * alien_number
     alien.rect.x = alien.x
-    alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
+    # alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
+    alien.rect.y = -random.randint(0,100)
     aliens.add(alien)
 
 
@@ -91,9 +99,11 @@ def create_fleet(ai_settings, screen, ship, aliens):
     """创建外星人群"""
     # 创建一个外星人，并计算每行可容纳多少个外星人
     alien = Alien(ai_settings, screen)
-    number_aliens_x = get_number_aliens_x(ai_settings, alien.rect.width)
-    number_rows = get_number_rows(ai_settings, ship.rect.height,
-                                  alien.rect.height)
+    # number_aliens_x = get_number_aliens_x(ai_settings, alien.rect.width)
+    # number_rows = get_number_rows(ai_settings, ship.rect.height,
+    #                               alien.rect.height)
+    number_aliens_x = random.randint(0,10)
+    number_rows = random.randint(0,10)
     # 创建外星人群
     for row_number in range(number_rows):
         for alien_number in range(number_aliens_x):

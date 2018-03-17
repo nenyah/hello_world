@@ -1,12 +1,15 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*- 
+# @Author: Steven 
+# @Date: 2018-02-24 16:51:31 
+# @Last Modified by: Steven 
+# @Last Modified time: 2018-03-14 13:54:48 
+# @file: alien.py
 # @Author: Steven
 # @Date:   2018-02-24 16:51:31
 # @Last Modified by:   Steven
 # @Last Modified time: 2018-03-01 16:31:14
 import pygame
 from pygame.sprite import Sprite
-import random
-
 
 class Alien(Sprite):
     """表示外星人的类"""
@@ -20,7 +23,7 @@ class Alien(Sprite):
         self.image = pygame.image.load('images/alien_small.bmp')
         self.rect = self.image.get_rect()
         # 每个外星人最初都在屏幕左上角附近
-        self.rect.x = random.randint(0, self.rect.width)
+        self.rect.x = self.rect.width
         self.rect.y = 0
         # 存储外星人的准确位置
         self.x = float(self.rect.x)
