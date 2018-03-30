@@ -14,11 +14,12 @@ import pandas as pd
 # import pymongo
 import time
 
-
 headers = {
     'User-Agent':
         'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36'
 }
+
+
 # client = pymongo.MongoClient('localhost', 27017)
 # amazon = client['amazon']
 # reviews = amazon['reviews']
@@ -39,7 +40,7 @@ def get_review_page_number(asin):
     return max_page
 
 
-def get_info(url, asinc):
+def get_info(url, asin):
     df = pd.DataFrame()
     time.sleep(1)
     web_data = requests.get(url, headers=headers)
@@ -50,7 +51,8 @@ def get_info(url, asinc):
     review_text = soup.select('#cm_cr-review_list .review-text')
     size_and_clor = soup.select(
         '#cm_cr-review_list .a-size-mini.a-color-secondary')
-    for title, rating, date, text, size_and_clor in zip(review_title, review_rating, review_date, review_text, size_and_clor):
+    for title, rating, date, text, size_and_clor in zip(review_title, review_rating, review_date, review_text,
+                                                        size_and_clor):
         data = {
             'title': title.text,
             'rating': float(rating.text.split()[0]),
@@ -70,9 +72,11 @@ def get_urls(url):
     asin = get_asin(url)
     max_page = get_review_page_number(asin)
     print(max_page)
-    urls = ['http://www.amazon.com/product-reviews/{0}?pageNumber={1}&reviewerType=all_reviews'.format(asin, str(num)) for num in
+    urls = ['http://www.amazon.com/product-reviews/{0}?pageNumber={1}&reviewerType=all_reviews'.format(asin, str(num))
+            for num in
             range(1, max_page + 1)]
     return urls
+
 
 if __name__ == '__main__':
     url = 'https://www.amazon.com/Capezio-Womens-DS11A-Fierce-Dansneaker/dp/B0009ZAHFE/ref=sr_1_16?s=apparel&ie=UTF8&qid=1498452763&sr=1-16&nodeID=7141123011&psd=1&keywords=dance+shoes'
@@ -80,5 +84,5 @@ if __name__ == '__main__':
     df = pd.DataFrame()
     for url in get_urls(url):
         df = df.append(get_info(url, asin), ignore_index=True)
-    df.to_csv(f'{asin}.csv', index=False)
+    df.to_csv(f"{asin}.csv", index=False)
     print(df.info())

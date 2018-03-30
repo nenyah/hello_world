@@ -1,5 +1,6 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import pandas as pd
+
 
 # 自定义连接函数，用于实现L_{k-1}到C_k的连接
 
@@ -13,6 +14,7 @@ def connect_string(x, ms):
             if x[i][:l - 1] == x[j][:l - 1] and x[i][l - 1] != x[j][l - 1]:
                 r.append(x[i][:l - 1] + sorted([x[j][l - 1], x[i][l - 1]]))
     return r
+
 
 # 寻找关联规则的函数
 
@@ -33,12 +35,12 @@ def find_rule(d, support, confidence, ms='--'):
 
         # 创建连接数据，这一步耗时、耗内存最严重。当数据集较大时，可以考虑并行运算优化。
         d_2 = pd.DataFrame(list(map(sf, column)), index=[
-                           ms.join(i) for i in column]).T
+            ms.join(i) for i in column]).T
 
         support_series_2 = 1.0 * \
-            d_2[[ms.join(i) for i in column]].sum() / len(d)  # 计算连接后的支持度
+                           d_2[[ms.join(i) for i in column]].sum() / len(d)  # 计算连接后的支持度
         column = list(support_series_2[
-                      support_series_2 > support].index)  # 新一轮支持度筛选
+                          support_series_2 > support].index)  # 新一轮支持度筛选
         support_series = support_series.append(support_series_2)
         column2 = []
 

@@ -4,10 +4,8 @@
 # @Last Modified by: Steven
 # @Last Modified time: 2018-03-10 12:49:04
 # @file: spider_main.py
-# Created on 2018年3月9日
-# @author: Administrator
 
-from aliexpress import url_manager, html_downloader, html_outputer, html_parser
+import url_manager, html_downloader, html_outputer, html_parser
 
 
 class SpiderMain(object):

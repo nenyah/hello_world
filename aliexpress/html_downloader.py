@@ -4,9 +4,8 @@
 # @Last Modified by: Steven
 # @Last Modified time: 2018-03-10 12:45:43
 # @file: html_downloader.py
-# Created on 2018年3月9日
-# @author: Administrator
-from aliexpress.ip_agent import request
+
+from ip_agent import request
 
 
 class HtmlDownloader(object):

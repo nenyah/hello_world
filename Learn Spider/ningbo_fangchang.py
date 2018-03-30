@@ -3,8 +3,8 @@
 # @Author: steven
 # @Date:   2017-05-08 15:07:44
 # @email: lucibriel@163.com
-# @Last Modified by:   Steven
-# @Last Modified time: 2018-01-29 14:02:45
+# @Last Modified by: Steven 
+# @Last Modified time: 2018-03-24 15:27:03 
 
 import requests
 from bs4 import BeautifulSoup
@@ -13,7 +13,6 @@ from multiprocessing import Pool
 import time
 from crawler_tool import request
 import arrow
-
 
 client = pymongo.MongoClient('localhost', 27017)
 fangcan = client['fangcan']
@@ -39,7 +38,7 @@ def get_list_url(url):
             href = 'http://newhouse.cnnbfdc.com/' + a['href']
             info = {'name': title, 'url': href}
             print('Get list info: {0}'.format(info))
-            if urls_list.find({'url':info['url']}):
+            if not urls_list.find({'url': info['url']}):
                 urls_list.insert_one(info)
             # print(info)
     #         data.append(info)
@@ -48,7 +47,8 @@ def get_list_url(url):
 
 def tidy_content(content):
     return content.strip().replace(' ', '').replace(
-        '\r', '').replace('\n', '').replace('\xa0地图定位', '').replace('：','')
+        '\r', '').replace('\n', '').replace('\xa0地图定位', '').replace('：', '')
+
 
 def get_detail(page_url):
     html = request.get(page_url, 3)
@@ -86,4 +86,3 @@ if __name__ == '__main__':
     pool = Pool()
     while len(get_rest_of_url()) != 0:
         pool.map(get_detail, get_rest_of_url())
-

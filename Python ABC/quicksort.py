@@ -18,5 +18,6 @@ def quicksort(array):
             greater.append(x)
     return quicksort(less) + [pivot] + quicksort(greater)
 
+
 if __name__ == '__main__':
     print(quicksort([9, 8, 4, 5, 32, 46, 64, 2, 1, 0, 10]))

@@ -6,7 +6,6 @@ from PyQt5 import QtWidgets
 # pyqt窗口必须在QApplication方法中使用
 app = QtWidgets.QApplication(sys.argv)
 
-
 label = QtWidgets.QLabel(
     "<p style='color: red; margin: 0 20px'><b>Hello Everybody</b></p><br/><p style='color: blue; margin:0 20px'>This is my way</p>")
 # qt支持html标签，强大吧

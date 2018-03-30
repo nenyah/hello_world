@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: steven
 # @Date:   2017-01-20 14:13:56
-# @Last Modified by:   Steven
-# @Last Modified time: 2018-03-02 16:37:33
+# @Last Modified by: Steven 
+# @Last Modified time: 2018-03-23 16:13:29 
 # @email: lucibriel@163.com
 
 
@@ -18,7 +18,6 @@ def get_date(days=0, slash=""):
 
 
 def tidy_number(el):
-    el = str(el)
     if ',' in el:
         return float(el.replace(',', ''))
     if '%' in el:
