@@ -15,6 +15,7 @@ import logging
 import os
 import re
 import time
+import sys
 
 try:
     from urllib.parse import urlparse  # py3
