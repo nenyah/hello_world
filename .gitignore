@@ -5,3 +5,7 @@ dance+sneaker.csv
 .ipynb_checkpoints
 .metadata
 .vscode
+*/__pycache__/*
+*.pyc
+*/.chache/*
+*.pkl

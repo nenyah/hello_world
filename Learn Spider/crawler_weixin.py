@@ -130,7 +130,7 @@ class Crawler:
             htmls.append(file + f_name)
         try:
             config = pdfkit.configuration(
-                wkhtmltopdf=r"D:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe")
+                wkhtmltopdf=r"D:\Program Files (x86)\wkhtmltopdf\bin\wkhtmltopdf.exe")
             pdfkit.from_file(htmls, self.name + ".pdf",
                              options=options, configuration=config)
         except:
