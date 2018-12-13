@@ -9,3 +9,5 @@ dance+sneaker.csv
 *.pyc
 */.chache/*
 *.pkl
+geckodriver.log
+*.txt
