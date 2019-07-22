@@ -14,13 +14,18 @@ loop = asyncio.get_event_loop()
 
 
 async def test_example():
-    conn = await aiomysql.connect(host='localhost', port=3306, user='root', password='mysql', db='awesome', loop=loop)
+    conn = await aiomysql.connect(host='localhost',
+                                  port=3306,
+                                  user='root',
+                                  password='mysql',
+                                  db='awesome',
+                                  loop=loop)
 
     cur = await conn.cursor()
     await cur.execute("SELECT * FROM blogs")
     print(cur.description)
     r = await cur.fetchall()
-    # print(r)
+    print(r)
     await cur.close()
     conn.close()
 
